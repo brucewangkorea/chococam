@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="fill"
+    android:background="@drawable/reply_list_bg" >
+
+    <RelativeLayout
+        android:id="@+id/rltopbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <include layout="@layout/title_bar" />
+    </RelativeLayout>
+
+
+
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rltopbar"
+        android:fillViewport="false" >
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="fill"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:id="@+id/UserInfoLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/setting_menu_top" >
+
+                <com.chocopepper.chococam.util.ImageViewRounded
+                    android:id="@+id/imgUser"
+                    android:layout_width="70dip"
+                    android:layout_height="70dip"
+                    android:layout_marginBottom="4dip"
+                    android:layout_marginLeft="8dip"
+                    android:layout_marginRight="8dip"
+                    android:layout_marginTop="4dip"
+                    android:src="@drawable/default_user" />
+
+                <LinearLayout
+                    android:id="@+id/linearTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dip"
+                    android:layout_toRightOf="@+id/imgUser"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/TextViewName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:textColor="#414141"
+                        android:textSize="20dip" />
+                    
+                    <TextView
+                        android:id="@+id/TextViewTitle"                        
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dip"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:textColor="#414141"
+                        android:textSize="15dip" />
+
+                    <TextView
+                        android:id="@+id/TextViewDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dip"
+                        android:text="@string/date"
+                        android:textColor="#cccccc"
+                        android:textSize="15dip" />
+                </LinearLayout>
+            </RelativeLayout>
+
+			<FrameLayout
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content" >
+
+			    <ImageView
+			        android:id="@+id/imgScreenShot"
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_marginLeft="5dip"
+			        android:layout_marginRight="5dip"
+			        android:layout_marginTop="4dip" />
+			</FrameLayout>
+            
+            <TextView
+                android:id="@+id/textViewDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="13dip"
+                android:text=""
+                android:textColor="#000000"
+                android:textSize="12dip" />
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/llayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/llayout2"
+        android:layout_below="@+id/scrollView1"
+        android:orientation="vertical" >
+
+
+
+        <lib.pulltorefresh.PullToRefresh
+            android:id="@+id/replyListView"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/reply_list_bg"
+            android:cacheColorHint="#00000000"
+            android:divider="#f2f2f2"
+            android:dividerHeight="1dip"
+            android:listSelector="@drawable/gridview_selector_empty" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llayout2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/reply_bar"
+        android:gravity="bottom"
+        android:minHeight="33dp"
+        android:orientation="horizontal"
+        android:paddingTop="2dp" >
+
+        <EditText
+            android:id="@+id/etxtMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dip"
+            android:layout_weight="1"
+            android:background="@drawable/inputbox"
+            android:ems="10"
+            android:maxLines="4"
+            android:paddingLeft="10dip"
+            android:paddingRight="10dip"
+            android:text="" />
+
+        <Button
+            android:id="@+id/btnSend"
+            android:layout_width="68dip"
+            android:layout_height="33dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="0dp"
+            android:layout_marginRight="5dip"
+            android:layout_weight="0"
+            android:background="@drawable/reply_send_button"
+            android:text="@string/send"
+            android:textColor="#6a6261" />
+    </LinearLayout>
+
+</RelativeLayout>

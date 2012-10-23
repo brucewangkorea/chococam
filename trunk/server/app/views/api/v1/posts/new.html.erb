@@ -1,0 +1,39 @@
+<h1>Post#create</h1>
+<p>Find me in app/views/ap1/vi1/posts/new.html.erb</p>
+
+<%= form_for @post, url: api_v1_posts_path, :html => {:multipart => true} do |f| %>    
+  <p>  
+    <%= f.label :description %> <%= f.text_field :description %>  
+    <%= f.hidden_field :scope, :value => "public" %>
+  </p>  
+
+  <p>
+		<!-- 2012-09-12 brucewang
+		Movie 모델이 속하는, 상위의 Post 모델에 대한 값을 지정하기 위해서
+		fields_for를 사용하여 Movie모델의  post라는  associataion에 접근하는데,
+		이 상위 Post(belongs_to) 모델에 대한 association 필드가 기본값이 nil이라서
+		곧바로 다음의 erb helper 코드는 작동하지 않는다. Controller에서 @movie를
+		생성하고, 다시 그 @movie 의  post멤버를 다시 new해서 접근 가능하도록
+		해주면 문제가 해결된다.
+		-->
+		<%= f.fields_for :movie do |movie_fields| %>
+		  <p>  
+      <%= movie_fields.label :name %> <%= movie_fields.text_field :name %>
+      </p>
+      <p>
+        --------IF USE REMOTE MOVIES--------<br />
+        <%= movie_fields.label :remote_url %> <%= movie_fields.text_field :remote_url %> <br /> 
+        <%= movie_fields.label :remote_source %> <%= movie_fields.text_field :remote_source %> <br /> 
+        <%= movie_fields.label :thumbnails %>: <%= movie_fields.text_field :thumbnails %> (ex) ["http://a.com/test.mp4","...",...]
+      </p>  
+
+      <p> 
+        -------IF UPLOAD FILE-------<br />
+        <%= movie_fields.file_field :file %>  
+      </p>  
+		<% end %>
+
+
+  </p>
+  <p><%= f.submit %></p>  
+<% end %>  

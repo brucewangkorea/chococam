@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="44dp"
+    android:padding="0dp"
+    android:background="@drawable/header" >
+    <LinearLayout
+        android:id="@+id/logo"
+	    android:orientation="horizontal"
+        android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginLeft="10dip"
+	    android:padding="0dp"
+        android:layout_alignParentLeft="true"
+        android:visibility="gone" >
+	   	<ImageView
+	   	    android:layout_width="wrap_content"
+	   	    android:layout_height="wrap_content"
+	   	    android:src="@drawable/logo_new" 
+	   	    android:adjustViewBounds="true"
+		    android:layout_gravity="left" />
+   	</LinearLayout>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="24sp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:gravity="center|center_horizontal" 
+        android:layout_gravity="center|center_horizontal" 
+        android:layout_alignParentLeft="true"
+        android:ellipsize="end"
+        android:singleLine="true"        
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp" />
+   	
+   	<LinearLayout
+   	    android:id="@+id/buttons"
+	    android:orientation="horizontal"
+        android:layout_weight="1"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:padding="0dp" 
+	    android:layout_gravity="right"
+	    android:gravity="right"
+	    android:layout_alignParentRight="true" >
+   	    <ImageView
+   	        android:id="@+id/btnManages"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:src="@drawable/btn_manage" 
+    	    android:adjustViewBounds="true"
+    	    android:layout_marginRight="5dp"
+    	    android:visibility="gone" />
+   	    
+   	    <RelativeLayout
+	   	    android:id="@+id/btnEdit"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+    		android:padding="0dp"
+    		android:visibility="gone" >
+   	        <ImageView
+	    	    android:layout_width="wrap_content"
+	    	    android:layout_height="wrap_content"
+	    	    android:src="@drawable/btn_edit" 
+	    	    android:adjustViewBounds="true"
+	    	    android:paddingRight="5dp" />
+   	    	<TextView 
+	   	        android:id="@+id/btnEditText"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+	    	    android:layout_centerInParent="true"
+	    	    android:textColor="#FFFFFF"
+	    	    android:textSize="18sp"
+	    	    android:textStyle="bold" />
+   	    </RelativeLayout>
+   	    
+   	    <ImageView
+   	        android:id="@+id/btnCreateChat"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:src="@drawable/btn_createchat" 
+    	    android:adjustViewBounds="true"
+    	    android:paddingRight="5dp"
+    		android:visibility="gone" />
+	</LinearLayout>
+</RelativeLayout>

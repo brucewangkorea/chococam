@@ -1,0 +1,19 @@
+<h1>Posts#index</h1>
+<p>Find me in app/views/api/v1/posts/show.html.erb</p>
+
+<%= @post.inspect %>  <br/>
+<%= @post.movie.inspect %>  <br/>
+
+<%=  @post.comments.each do |comment| %>    
+  <p>
+		<%= form_for comment, url: api_v1_posts_create_or_update_comment_path do |comment_fields| %>
+		<%= comment_fields.hidden_field :id unless comment.user_id.nil? %> 
+			<%= comment_fields.hidden_field :post_id %>
+	    <%= comment_fields.label :description %>
+	    <%= comment_fields.text_field :description %>  
+			<%= comment_fields.submit %>
+		<% end %>
+  </p>
+	.........
+  
+<% end %>  

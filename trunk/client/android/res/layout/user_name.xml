@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:android1="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background_gray"
+    android:orientation="vertical"
+    android1:baselineAligned="false" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/phone_number_top_bar" >
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="22dp"
+            android:text="@string/user_Name"
+            android:textColor="#ffffff"
+            android:textSize="18dip" />
+
+        <TextView
+            android1:id="@+id/txtLength_info"
+            android1:layout_width="fill_parent"
+            android1:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android1:layout_marginRight="22dip"
+            android:textColor="#ffffff"
+            android1:gravity="right"
+            android1:text="0/20"
+            android1:textSize="18dip" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android1:id="@+id/LinearLayout01"
+        android1:layout_width="fill_parent"
+        android1:layout_height="fill_parent"
+        android1:orientation="vertical" >
+
+        <LinearLayout
+            android1:id="@+id/LinearLayout02"
+            android1:layout_width="fill_parent"
+            android1:layout_height="wrap_content"
+            android1:gravity="center"
+            android1:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/activity_message_edit"
+                android:layout_width="match_parent"
+                android:layout_height="68dip"
+                android:background="@drawable/mail_invite_input"
+                android:ems="10"
+                android:inputType="textEmailAddress"
+                android:singleLine="true"
+                android:paddingBottom="15dip"
+        		android:paddingLeft="10dip"
+                android1:maxLength="20" />
+
+            <Button
+                android:id="@+id/custom_btn"
+                android:layout_width="154dip"
+                android:layout_height="48dip"
+                android:layout_gravity="center"
+                android:background="@drawable/btn_mail_invite_nor"
+                android:text="@android:string/ok"
+                android:textColor="#8e8e8e"
+                android:textSize="20dip" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

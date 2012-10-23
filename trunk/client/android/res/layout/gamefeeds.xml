@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background_gray"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/llmsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"                
+        android:orientation="horizontal"
+        android:layout_gravity="center" >
+
+        <com.chocopepper.chococam.util.ImageViewRounded
+            android:id="@+id/imgUser"
+            android:layout_width="51dip"
+            android:layout_height="51dip"
+            android:layout_gravity="center"            
+            android:src="@drawable/add_friend" />
+
+        <TextView
+            android:id="@+id/txtContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="4dp"
+            android:layout_weight="1"
+            android:text="@string/gamefeeds_empty_msg"
+            android:textColor="#000000"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+    <lib.pulltorefresh.PullToRefresh
+        android:id="@+id/refreshListView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:cacheColorHint="#00000000"
+        android:divider="#ffffffff" 
+        />
+
+
+</FrameLayout>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <com.chocopepper.chococam.util.ImageViewRounded
+        android:id="@+id/imgUser"
+        android:layout_width="61dip"
+        android:layout_height="61dip"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="13dip"
+        android:layout_marginRight="13dip"
+        android:layout_marginTop="16dip"
+        android:src="@drawable/default_user" />
+
+    <LinearLayout
+        android:id="@+id/linearTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dip"
+        android:layout_toRightOf="@+id/imgUser"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/TextViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="user name"
+            android:textColor="#000000"
+            android:textSize="16dip"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/TextViewMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="M"
+            android:textColor="#464646"
+            android:textSize="14dip" />
+
+        <TextView
+            android:id="@+id/TextViewDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="date"
+            android:textColor="#cccccc"
+            android:textSize="14dip" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 진행률 표시줄 배경 -->
+    <item android:id="@android:id/background">
+
+        <!-- 도형으로 설정 -->
+        <shape>
+            <!-- 도형 모서리 반지름 -->
+            <corners android:radius="20dip" />
+
+            <!-- 색변화 -->
+            <gradient
+                    android:startColor="#ffd9d8d9"
+                    android:centerColor="#ff8a8d8a"
+                    android:centerY="0.75"
+                    android:endColor="#ff545654"
+                    android:angle="270"
+            />
+        </shape>
+    </item>
+    
+
+    <!-- 두번째 진행률 표시줄 설정 -->
+
+    <item android:id="@android:id/secondaryProgress">
+        <clip>
+
+            <!-- 도형으로 설정 -->
+            <shape>
+
+                <!-- 도형 모서리 반지름 -->
+                <corners android:radius="20dip" />
+
+                <!-- 색변화 -->
+                <gradient
+                        android:startColor="#80ffd300"
+                        android:centerColor="#80ffb600"
+                        android:centerY="0.75"
+                        android:endColor="#a0ffcb00"
+                        android:angle="270"
+                />
+            </shape>
+        </clip>
+    </item>
+    
+
+    <!-- 첫번째 진행률 표시줄 설정 -->
+    <item android:id="@android:id/progress">
+        <clip>
+
+            <!-- 도형으로 설정 -->
+            <shape>
+                <!-- 도형 모서리 반지름 -->
+                <corners android:radius="20dip" />
+
+                <!-- 색변화 -->
+                <gradient
+                        android:startColor="#ffffa0a0"
+                        android:centerColor="#ffff5353"
+                        android:centerY="0.5"
+                        android:endColor="#ffff0000"
+                        android:angle="270"
+                />
+            </shape>
+        </clip>
+    </item>
+    
+</layer-list>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:background="@drawable/background_gray">
+    
+    <lib.pulltorefresh.PullToRefresh
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ngame_list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"        
+        android:background="@drawable/background_gray"
+        android:cacheColorHint="#00000000"
+        android:divider="#f2f2f2"
+        android:dividerHeight="1dip" />
+
+</LinearLayout>

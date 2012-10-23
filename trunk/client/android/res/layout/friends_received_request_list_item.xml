@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="2dip"
+    android:paddingTop="2dip" >
+
+    <com.chocopepper.chococam.util.ImageViewRounded
+        android:id="@+id/imgUser"
+        android:layout_width="51dip"
+        android:layout_height="51dip"
+        android:layout_marginLeft="10dip"
+        android:src="@drawable/default_user" />
+
+    <Button
+        android:id="@+id/buttonRequestFriendship"
+        android:layout_width="50dip"
+        android:layout_height="32dip"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dip"
+        android:background="@drawable/btn_response"
+        android:focusable="false"
+        android:src="@drawable/arrow"
+        android:text="@string/accept"
+        android:textColor="#9b9b9b" />
+
+    <TextView
+        android:id="@+id/txtUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dip"
+        android:layout_toRightOf="@+id/imgUser"
+        android:layout_toLeftOf="@+id/buttonRequestFriendship"
+        android:text="김태희"
+        android:textColor="#000000"
+        android:textSize="16dp" />
+
+</RelativeLayout>

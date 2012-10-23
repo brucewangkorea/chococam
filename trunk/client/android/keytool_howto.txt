@@ -1,0 +1,2 @@
+keytool -genkey -alias gamchen_release -keyalg RSA -validity 3650 -keystore release.keystore
+keytool -exportcert -alias gamchen_release -keystore release.keystore | openssl sha1 -binary | openssl base64

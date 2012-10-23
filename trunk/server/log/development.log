@@ -1,0 +1,569 @@
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+
+
+Started GET "/api/v1/tokens.json" for 127.0.0.1 at 2012-10-11 11:31:50 +0900
+
+ActionController::RoutingError (No route matches [GET] "/api/v1/tokens.json"):
+  actionpack (3.2.7) lib/action_dispatch/middleware/debug_exceptions.rb:21:in `call'
+  actionpack (3.2.7) lib/action_dispatch/middleware/show_exceptions.rb:56:in `call'
+  railties (3.2.7) lib/rails/rack/logger.rb:26:in `call_app'
+  railties (3.2.7) lib/rails/rack/logger.rb:16:in `call'
+  actionpack (3.2.7) lib/action_dispatch/middleware/request_id.rb:22:in `call'
+  rack (1.4.1) lib/rack/methodoverride.rb:21:in `call'
+  rack (1.4.1) lib/rack/runtime.rb:17:in `call'
+  activesupport (3.2.7) lib/active_support/cache/strategy/local_cache.rb:72:in `call'
+  rack (1.4.1) lib/rack/lock.rb:15:in `call'
+  actionpack (3.2.7) lib/action_dispatch/middleware/static.rb:62:in `call'
+  railties (3.2.7) lib/rails/engine.rb:479:in `call'
+  railties (3.2.7) lib/rails/application.rb:220:in `call'
+  rack-test (0.6.1) lib/rack/mock_session.rb:30:in `request'
+  rack-test (0.6.1) lib/rack/test.rb:219:in `process_request'
+  rack-test (0.6.1) lib/rack/test.rb:114:in `request'
+  actionpack (3.2.7) lib/action_dispatch/testing/integration.rb:300:in `process'
+  actionpack (3.2.7) lib/action_dispatch/testing/integration.rb:33:in `get'
+  (irb):5:in `irb_binding'
+  /Users/brucewang/.rvm/rubies/ruby-1.9.3-p125/lib/ruby/1.9.1/irb/workspace.rb:80:in `eval'
+  /Users/brucewang/.rvm/rubies/ruby-1.9.3-p125/lib/ruby/1.9.1/irb/workspace.rb:80:in `evaluate'
+  /Users/brucewang/.rvm/rubies/ruby-1.9.3-p125/lib/ruby/1.9.1/irb/context.rb:254:in `evaluate'
+  /Users/brucewang/.rvm/rubies/ruby-1.9.3-p125/lib/ruby/1.9.1/irb.rb:159:in `block (2 levels) in eval_input'
+  /Users/brucewang/.rvm/rubies/ruby-1.9.3-p125/lib/ruby/1.9.1/irb.rb:273:in `signal_status'
+  /Users/brucewang/.rvm/rubies/ruby-1.9.3-p125/lib/ruby/1.9.1/irb.rb:156:in `block in eval_input'
+  /Users/brucewang/.rvm/rubies/ruby-1.9.3-p125/lib/ruby/1.9.1/irb/ruby-lex.rb:243:in `block (2 levels) in each_top_level_statement'
+  /Users/brucewang/.rvm/rubies/ruby-1.9.3-p125/lib/ruby/1.9.1/irb/ruby-lex.rb:229:in `loop'
+  /Users/brucewang/.rvm/rubies/ruby-1.9.3-p125/lib/ruby/1.9.1/irb/ruby-lex.rb:229:in `block in each_top_level_statement'
+  /Users/brucewang/.rvm/rubies/ruby-1.9.3-p125/lib/ruby/1.9.1/irb/ruby-lex.rb:228:in `catch'
+  /Users/brucewang/.rvm/rubies/ruby-1.9.3-p125/lib/ruby/1.9.1/irb/ruby-lex.rb:228:in `each_top_level_statement'
+  /Users/brucewang/.rvm/rubies/ruby-1.9.3-p125/lib/ruby/1.9.1/irb.rb:155:in `eval_input'
+  /Users/brucewang/.rvm/rubies/ruby-1.9.3-p125/lib/ruby/1.9.1/irb.rb:70:in `block in start'
+  /Users/brucewang/.rvm/rubies/ruby-1.9.3-p125/lib/ruby/1.9.1/irb.rb:69:in `catch'
+  /Users/brucewang/.rvm/rubies/ruby-1.9.3-p125/lib/ruby/1.9.1/irb.rb:69:in `start'
+  railties (3.2.7) lib/rails/commands/console.rb:47:in `start'
+  railties (3.2.7) lib/rails/commands/console.rb:8:in `start'
+  railties (3.2.7) lib/rails/commands.rb:41:in `<top (required)>'
+  script/rails:6:in `require'
+  script/rails:6:in `<main>'
+
+
+  Rendered /Users/brucewang/.rvm/gems/ruby-1.9.3-p125/gems/actionpack-3.2.7/lib/action_dispatch/middleware/templates/rescues/routing_error.erb within rescues/layout (63.5ms)
+
+
+Started POST "/api/v1/tokens.json" for 127.0.0.1 at 2012-10-11 11:33:14 +0900
+Processing by Api::V1::TokensController#create as JSON
+  Parameters: {"email"=>"a1@test.com", "password"=>"[FILTERED]"}
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (2.2697ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"email"=>"a1@test.com"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (4.7970ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"authentication_token"=>"RQUwjyhiSyDNDWRVL56N"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.7241ms)
+  MOPED: 127.0.0.1:27017 UPDATE       database=chococam_development collection=users selector={"_id"=>"506e632f6a87457505000001"} update={"$set"=>{"name"=>"", "authentication_token"=>"RQUwjyhiSyDNDWRVL56N", "updated_at"=>2012-10-11 02:33:14 UTC}} flags=[] (0.3090ms)
+[paperclip] Saving attachments.
+Completed 200 OK in 116ms (Views: 0.4ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/api/v1/tokens.json" for 127.0.0.1 at 2012-10-11 11:33:24 +0900
+Processing by Api::V1::TokensController#create as JSON
+  Parameters: {"email"=>"a1@test.com", "password"=>"[FILTERED]"}
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"email"=>"a1@test.com"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.7691ms)
+Completed 200 OK in 100ms (Views: 0.2ms | ActiveRecord: 0.0ms)
+Connecting to database specified by database.yml
+
+
+Started POST "/api/v1/token.json" for 127.0.0.1 at 2012-10-11 11:36:58 +0900
+
+ActionController::RoutingError (No route matches [POST] "/api/v1/token.json"):
+  actionpack (3.2.7) lib/action_dispatch/middleware/debug_exceptions.rb:21:in `call'
+  actionpack (3.2.7) lib/action_dispatch/middleware/show_exceptions.rb:56:in `call'
+  railties (3.2.7) lib/rails/rack/logger.rb:26:in `call_app'
+  railties (3.2.7) lib/rails/rack/logger.rb:16:in `call'
+  actionpack (3.2.7) lib/action_dispatch/middleware/request_id.rb:22:in `call'
+  rack (1.4.1) lib/rack/methodoverride.rb:21:in `call'
+  rack (1.4.1) lib/rack/runtime.rb:17:in `call'
+  activesupport (3.2.7) lib/active_support/cache/strategy/local_cache.rb:72:in `call'
+  rack (1.4.1) lib/rack/lock.rb:15:in `call'
+  actionpack (3.2.7) lib/action_dispatch/middleware/static.rb:62:in `call'
+  railties (3.2.7) lib/rails/engine.rb:479:in `call'
+  railties (3.2.7) lib/rails/application.rb:220:in `call'
+  rack (1.4.1) lib/rack/content_length.rb:14:in `call'
+  railties (3.2.7) lib/rails/rack/log_tailer.rb:17:in `call'
+  rack (1.4.1) lib/rack/handler/webrick.rb:59:in `service'
+  /Users/brucewang/.rvm/rubies/ruby-1.9.3-p125/lib/ruby/1.9.1/webrick/httpserver.rb:138:in `service'
+  /Users/brucewang/.rvm/rubies/ruby-1.9.3-p125/lib/ruby/1.9.1/webrick/httpserver.rb:94:in `run'
+  /Users/brucewang/.rvm/rubies/ruby-1.9.3-p125/lib/ruby/1.9.1/webrick/server.rb:191:in `block in start_thread'
+
+
+  Rendered /Users/brucewang/.rvm/gems/ruby-1.9.3-p125/gems/actionpack-3.2.7/lib/action_dispatch/middleware/templates/rescues/routing_error.erb within rescues/layout (4.7ms)
+
+
+Started POST "/api/v1/tokens.json" for 127.0.0.1 at 2012-10-11 11:37:07 +0900
+Processing by Api::V1::TokensController#create as JSON
+  Parameters: {"password"=>"[FILTERED]", "email"=>"a1@test.com"}
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (0.9501ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"email"=>"a1@test.com"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.6540ms)
+Completed 200 OK in 129ms (Views: 0.4ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/api/v1/users/following.json" for 127.0.0.1 at 2012-10-11 11:37:51 +0900
+Processing by Api::V1::UsersController#following as JSON
+  Parameters: {"auth_token"=>"RQUwjyhiSyDNDWRVL56N"}
+WARNING: Can't verify CSRF token authenticity
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (0.8068ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"authentication_token"=>"RQUwjyhiSyDNDWRVL56N"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (1.0171ms)
+  MOPED: 127.0.0.1:27017 UPDATE       database=chococam_development collection=users selector={"_id"=>"506e632f6a87457505000001"} update={"$set"=>{"last_sign_in_at"=>2012-10-05 05:59:43 UTC, "current_sign_in_at"=>2012-10-11 02:37:51 UTC, "sign_in_count"=>3, "updated_at"=>2012-10-11 02:37:51 UTC}} flags=[] (0.3519ms)
+[paperclip] Saving attachments.
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=follows selector={"user_id_from"=>"506e632f6a87457505000001", "blocked"=>false} flags=[] limit=0 skip=0 fields={"user_id_to"=>1, "accepted"=>1} (0.7491ms)
+Completed 200 OK in 49ms (Views: 0.4ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/api/v1/posts/popular.json" for 127.0.0.1 at 2012-10-11 11:38:24 +0900
+Processing by Api::V1::PostsController#popular as JSON
+  Parameters: {"auth_token"=>"RQUwjyhiSyDNDWRVL56N"}
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (0.8750ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"authentication_token"=>"RQUwjyhiSyDNDWRVL56N"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.6700ms)
+  MOPED: 127.0.0.1:27017 UPDATE       database=chococam_development collection=users selector={"_id"=>"506e632f6a87457505000001"} update={"$set"=>{"last_sign_in_at"=>2012-10-11 02:37:51 UTC, "current_sign_in_at"=>2012-10-11 02:38:24 UTC, "sign_in_count"=>4, "updated_at"=>2012-10-11 02:38:24 UTC}} flags=[] (0.3767ms)
+[paperclip] Saving attachments.
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=action_targets selector={"$query"=>{"scope"=>"public", "_type"=>{"$in"=>["Post"]}}, "$orderby"=>{"movie.play_count"=>-1}} flags=[] limit=25 skip=0 fields=nil (1.5900ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"_id"=>"506e64046a87457505000002"} flags=[] limit=0 skip=0 fields=nil (0.4911ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=movies selector={"$query"=>{"post_id"=>"507291096a8745f40300002b"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (1.1282ms)
+Completed 200 OK in 79ms (Views: 3.1ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/api/v1/users/following.json" for 127.0.0.1 at 2012-10-11 11:39:54 +0900
+Processing by Api::V1::UsersController#following as JSON
+  Parameters: {"auth_token"=>"RQUwjyhiSyDNDWRVL56N"}
+WARNING: Can't verify CSRF token authenticity
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (0.7372ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"_id"=>"506e632f6a87457505000001"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.4389ms)
+[paperclip] Saving attachments.
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"authentication_token"=>"RQUwjyhiSyDNDWRVL56N"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.7772ms)
+  MOPED: 127.0.0.1:27017 UPDATE       database=chococam_development collection=users selector={"_id"=>"506e632f6a87457505000001"} update={"$set"=>{"last_sign_in_at"=>2012-10-11 02:38:24 UTC, "current_sign_in_at"=>2012-10-11 02:39:54 UTC, "sign_in_count"=>5, "updated_at"=>2012-10-11 02:39:54 UTC}} flags=[] (0.2720ms)
+[paperclip] Saving attachments.
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=follows selector={"user_id_from"=>"506e632f6a87457505000001", "blocked"=>false} flags=[] limit=0 skip=0 fields={"user_id_to"=>1, "accepted"=>1} (0.4869ms)
+Completed 200 OK in 15ms (Views: 0.3ms | ActiveRecord: 0.0ms)
+Connecting to database specified by database.yml
+
+
+Started POST "/api/v1/users/following.json" for 127.0.0.1 at 2012-10-11 11:58:06 +0900
+Processing by Api::V1::UsersController#following as JSON
+  Parameters: {"auth_token"=>"RQUwjyhiSyDNDWRVL56N"}
+WARNING: Can't verify CSRF token authenticity
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (1.3380ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"authentication_token"=>"RQUwjyhiSyDNDWRVL56N"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.6289ms)
+  MOPED: 127.0.0.1:27017 UPDATE       database=chococam_development collection=users selector={"_id"=>"506e632f6a87457505000001"} update={"$set"=>{"last_sign_in_at"=>2012-10-11 02:39:54 UTC, "current_sign_in_at"=>2012-10-11 02:58:07 UTC, "sign_in_count"=>6, "updated_at"=>2012-10-11 02:58:07 UTC}} flags=[] (0.3290ms)
+[paperclip] Saving attachments.
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=follows selector={"user_id_from"=>"506e632f6a87457505000001", "blocked"=>false} flags=[] limit=0 skip=0 fields={"user_id_to"=>1, "accepted"=>1} (0.9289ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"_id"=>"506e64046a87457505000002"} flags=[] limit=0 skip=0 fields=nil (0.6390ms)
+Completed 200 OK in 45ms (Views: 1.1ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/api/v1/users/following.json" for 127.0.0.1 at 2012-10-11 11:59:24 +0900
+Processing by Api::V1::UsersController#following as JSON
+  Parameters: {"auth_token"=>"RQUwjyhiSyDNDWRVL56N"}
+WARNING: Can't verify CSRF token authenticity
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (1.0750ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"authentication_token"=>"RQUwjyhiSyDNDWRVL56N"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.5512ms)
+  MOPED: 127.0.0.1:27017 UPDATE       database=chococam_development collection=users selector={"_id"=>"506e632f6a87457505000001"} update={"$set"=>{"last_sign_in_at"=>2012-10-11 02:58:07 UTC, "current_sign_in_at"=>2012-10-11 02:59:25 UTC, "sign_in_count"=>7, "updated_at"=>2012-10-11 02:59:25 UTC}} flags=[] (0.2980ms)
+[paperclip] Saving attachments.
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=follows selector={"user_id_from"=>"506e632f6a87457505000001", "blocked"=>false} flags=[] limit=0 skip=0 fields={"user_id_to"=>1, "accepted"=>1} (0.5512ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"_id"=>"506e64046a87457505000002"} flags=[] limit=0 skip=0 fields=nil (0.3800ms)
+Completed 200 OK in 41ms (Views: 0.7ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2012-10-11 11:59:35 +0900
+Processing by WelcomeController#index as HTML
+  Rendered welcome/index.html.erb within layouts/application (2.6ms)
+Completed 200 OK in 106ms (Views: 105.0ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/assets/welcome.css?body=1" for 127.0.0.1 at 2012-10-11 11:59:35 +0900
+Served asset /welcome.css - 200 OK (2ms)
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2012-10-11 11:59:35 +0900
+Served asset /application.css - 200 OK (8ms)
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2012-10-11 11:59:35 +0900
+Served asset /jquery.js - 200 OK (4ms)
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2012-10-11 11:59:35 +0900
+Served asset /jquery_ujs.js - 200 OK (3ms)
+
+
+Started GET "/assets/welcome.js?body=1" for 127.0.0.1 at 2012-10-11 11:59:35 +0900
+Served asset /welcome.js - 200 OK (2ms)
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2012-10-11 11:59:35 +0900
+Served asset /application.js - 200 OK (8ms)
+
+
+Started POST "/api/v1/users/followers.json" for 127.0.0.1 at 2012-10-11 13:29:30 +0900
+Processing by Api::V1::UsersController#followers as JSON
+  Parameters: {"auth_token"=>"RQUwjyhiSyDNDWRVL56N"}
+WARNING: Can't verify CSRF token authenticity
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (0.9279ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"authentication_token"=>"RQUwjyhiSyDNDWRVL56N"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (1.1032ms)
+  MOPED: 127.0.0.1:27017 UPDATE       database=chococam_development collection=users selector={"_id"=>"506e632f6a87457505000001"} update={"$set"=>{"last_sign_in_at"=>2012-10-11 02:59:25 UTC, "current_sign_in_at"=>2012-10-11 04:29:30 UTC, "sign_in_count"=>8, "updated_at"=>2012-10-11 04:29:30 UTC}} flags=[] (0.5229ms)
+[paperclip] Saving attachments.
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=follows selector={"user_id_to"=>"506e632f6a87457505000001", "blocked"=>false} flags=[] limit=0 skip=0 fields={"user_id_from"=>1, "accepted"=>1} (0.5331ms)
+Completed 200 OK in 14ms (Views: 0.3ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/api/v1/users/followers.json" for 127.0.0.1 at 2012-10-11 13:29:39 +0900
+Processing by Api::V1::UsersController#followers as JSON
+  Parameters: {"auth_token"=>"RQUwjyhiSyDNDWRVL56N"}
+WARNING: Can't verify CSRF token authenticity
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"authentication_token"=>"RQUwjyhiSyDNDWRVL56N"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.7260ms)
+  MOPED: 127.0.0.1:27017 UPDATE       database=chococam_development collection=users selector={"_id"=>"506e632f6a87457505000001"} update={"$set"=>{"last_sign_in_at"=>2012-10-11 04:29:30 UTC, "current_sign_in_at"=>2012-10-11 04:29:40 UTC, "sign_in_count"=>9, "updated_at"=>2012-10-11 04:29:40 UTC}} flags=[] (0.3011ms)
+[paperclip] Saving attachments.
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=follows selector={"user_id_to"=>"506e632f6a87457505000001", "blocked"=>false} flags=[] limit=0 skip=0 fields={"user_id_from"=>1, "accepted"=>1} (0.5691ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"_id"=>"506e64046a87457505000002"} flags=[] limit=0 skip=0 fields=nil (0.3951ms)
+Completed 200 OK in 115ms (Views: 0.7ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2012-10-11 13:50:41 +0900
+Processing by WelcomeController#index as HTML
+  Rendered welcome/index.html.erb within layouts/application (44.7ms)
+Completed 200 OK in 64ms (Views: 63.6ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/assets/welcome.css?body=1" for 127.0.0.1 at 2012-10-11 13:50:41 +0900
+Served asset /welcome.css - 200 OK (0ms)
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2012-10-11 13:50:41 +0900
+Served asset /application.css - 200 OK (0ms)
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2012-10-11 13:50:41 +0900
+Served asset /jquery_ujs.js - 200 OK (0ms)
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2012-10-11 13:50:41 +0900
+Served asset /application.js - 200 OK (0ms)
+
+
+Started GET "/assets/welcome.js?body=1" for 127.0.0.1 at 2012-10-11 13:50:41 +0900
+Served asset /welcome.js - 200 OK (0ms)
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2012-10-11 13:50:41 +0900
+Served asset /jquery.js - 200 OK (0ms)
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+
+
+Started POST "/api/v1/users/follow_requests.json" for 127.0.0.1 at 2012-10-11 14:10:57 +0900
+Processing by Api::V1::UsersController#follow_requests as JSON
+  Parameters: {"auth_token"=>"RQUwjyhiSyDNDWRVL56N"}
+WARNING: Can't verify CSRF token authenticity
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (0.8559ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"authentication_token"=>"RQUwjyhiSyDNDWRVL56N"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.6192ms)
+  MOPED: 127.0.0.1:27017 UPDATE       database=chococam_development collection=users selector={"_id"=>"506e632f6a87457505000001"} update={"$set"=>{"last_sign_in_at"=>2012-10-11 04:29:40 UTC, "current_sign_in_at"=>2012-10-11 05:10:57 UTC, "sign_in_count"=>10, "updated_at"=>2012-10-11 05:10:57 UTC}} flags=[] (0.3283ms)
+[paperclip] Saving attachments.
+Completed 500 Internal Server Error in 37ms
+
+NameError (undefined local variable or method `from' for #<Api::V1::UsersController:0x007fad5dc934e0>):
+  app/controllers/api/v1/users_controller.rb:129:in `follow_requests'
+
+
+  Rendered /Users/brucewang/.rvm/gems/ruby-1.9.3-p125/gems/actionpack-3.2.7/lib/action_dispatch/middleware/templates/rescues/_trace.erb (5.4ms)
+  Rendered /Users/brucewang/.rvm/gems/ruby-1.9.3-p125/gems/actionpack-3.2.7/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (6.5ms)
+  Rendered /Users/brucewang/.rvm/gems/ruby-1.9.3-p125/gems/actionpack-3.2.7/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (35.1ms)
+
+
+Started POST "/api/v1/users/follow_requests.json" for 127.0.0.1 at 2012-10-11 14:11:14 +0900
+Processing by Api::V1::UsersController#follow_requests as JSON
+  Parameters: {"auth_token"=>"RQUwjyhiSyDNDWRVL56N"}
+WARNING: Can't verify CSRF token authenticity
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"authentication_token"=>"RQUwjyhiSyDNDWRVL56N"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.7143ms)
+  MOPED: 127.0.0.1:27017 UPDATE       database=chococam_development collection=users selector={"_id"=>"506e632f6a87457505000001"} update={"$set"=>{"last_sign_in_at"=>2012-10-11 05:10:57 UTC, "current_sign_in_at"=>2012-10-11 05:11:14 UTC, "sign_in_count"=>11, "updated_at"=>2012-10-11 05:11:14 UTC}} flags=[] (0.3080ms)
+[paperclip] Saving attachments.
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=follows selector={"user_id_to"=>"506e632f6a87457505000001", "blocked"=>false, "rejected"=>false, "accepted"=>false} flags=[] limit=0 skip=0 fields={"user_id_from"=>1} (0.8309ms)
+Completed 200 OK in 35ms (Views: 0.4ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/api/v1/users/follow_requests.json" for 127.0.0.1 at 2012-10-11 14:12:21 +0900
+Processing by Api::V1::UsersController#follow_requests as JSON
+  Parameters: {"auth_token"=>"RQUwjyhiSyDNDWRVL56N"}
+WARNING: Can't verify CSRF token authenticity
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (1.1098ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"authentication_token"=>"RQUwjyhiSyDNDWRVL56N"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.5641ms)
+  MOPED: 127.0.0.1:27017 UPDATE       database=chococam_development collection=users selector={"_id"=>"506e632f6a87457505000001"} update={"$set"=>{"last_sign_in_at"=>2012-10-11 05:11:14 UTC, "current_sign_in_at"=>2012-10-11 05:12:21 UTC, "sign_in_count"=>12, "updated_at"=>2012-10-11 05:12:21 UTC}} flags=[] (0.8230ms)
+[paperclip] Saving attachments.
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=follows selector={"user_id_to"=>"506e632f6a87457505000001", "blocked"=>false, "rejected"=>false, "accepted"=>false} flags=[] limit=0 skip=0 fields={"user_id_from"=>1} (0.5240ms)
+Completed 200 OK in 104ms (Views: 0.3ms | ActiveRecord: 0.0ms)
+Connecting to database specified by database.yml
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (3.9089ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=action_targets selector={"$query"=>{"_type"=>{"$in"=>["Post"]}}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (2.0771ms)
+  MOPED: 127.0.0.1:27017 COMMAND      database=chococam_development command={:count=>"action_targets", :query=>{"_type"=>{"$in"=>["Post"]}}} (1.6010ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=action_targets selector={"$query"=>{"_type"=>{"$in"=>["Post"]}}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.8888ms)
+
+
+Started POST "/api/v1/posts/create_comment.json" for 127.0.0.1 at 2012-10-11 14:29:57 +0900
+Processing by Api::V1::PostsController#create_comment as JSON
+  Parameters: {"post_id"=>"507291096a8745f40300002b", "auth_token"=>"RQUwjyhiSyDNDWRVL56N", "description"=>"Fucking Funny"}
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (0.8121ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"authentication_token"=>"RQUwjyhiSyDNDWRVL56N"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.5591ms)
+  MOPED: 127.0.0.1:27017 UPDATE       database=chococam_development collection=users selector={"_id"=>"506e632f6a87457505000001"} update={"$set"=>{"last_sign_in_at"=>2012-10-11 05:12:21 UTC, "current_sign_in_at"=>2012-10-11 05:29:57 UTC, "sign_in_count"=>13, "updated_at"=>2012-10-11 05:29:57 UTC}} flags=[] (0.2980ms)
+[paperclip] Saving attachments.
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=action_targets selector={"_id"=>"507291096a8745f40300002b", "_type"=>{"$in"=>["Post"]}} flags=[] limit=0 skip=0 fields=nil (0.6938ms)
+  MOPED: 127.0.0.1:27017 INSERT       database=chococam_development collection=comments documents=[{"_id"=>"507659556a87458a21000001", "description"=>"Fucking Funny", "post_id"=>"507291096a8745f40300002b", "reply_to_id"=>nil, "user_id"=>"506e632f6a87457505000001", "updated_at"=>2012-10-11 05:29:57 UTC, "created_at"=>2012-10-11 05:29:57 UTC}] flags=[] (0.6368ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=movies selector={"$query"=>{"post_id"=>"507291096a8745f40300002b"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.6561ms)
+  MOPED: 127.0.0.1:27017 UPDATE       database=chococam_development collection=action_targets selector={"_id"=>"507291096a8745f40300002b"} update={"$set"=>{"comment_count"=>1, "updated_at"=>2012-10-11 05:29:57 UTC}} flags=[] (0.2439ms)
+[paperclip] Saving attachments.
+------------------------------------
+!!! after_save !!!!
+------------------------------------
+  MOPED: 127.0.0.1:27017 INSERT       database=chococam_development collection=actions documents=[{"_id"=>"507659556a87458a21000002", "user_id"=>"506e632f6a87457505000001", "action_type"=>0, "target_type"=>0, "target_id"=>"507291096a8745f40300002b", "updated_at"=>2012-10-11 05:29:57 UTC, "created_at"=>2012-10-11 05:29:57 UTC}] flags=[] (0.3178ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=follows selector={"user_id_to"=>"506e632f6a87457505000001", "blocked"=>false} flags=[] limit=0 skip=0 fields={"user_id_from"=>1, "accepted"=>1} (0.4759ms)
+  MOPED: 127.0.0.1:27017 INSERT       database=chococam_development collection=action_feeds documents=[{"_id"=>"507659556a87458a21000003", "action_id"=>"507659556a87458a21000002", "reader_id"=>"506e64046a87457505000002", "updated_at"=>2012-10-11 05:29:57 UTC, "created_at"=>2012-10-11 05:29:57 UTC}] flags=[] (0.2708ms)
+  MOPED: 127.0.0.1:27017 INSERT       database=chococam_development collection=action_feeds documents=[{"_id"=>"507659556a87458a21000004", "action_id"=>"507659556a87458a21000002", "reader_id"=>"506e632f6a87457505000001", "updated_at"=>2012-10-11 05:29:57 UTC, "created_at"=>2012-10-11 05:29:57 UTC}] flags=[] (0.2198ms)
+Completed 200 OK in 276ms (Views: 0.7ms | ActiveRecord: 0.0ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=action_targets selector={:_id=>"507291096a8745f40300002b"} flags=[] limit=-1 skip=0 fields=nil (0.5949ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=comments selector={"post_id"=>"507291096a8745f40300002b"} flags=[] limit=0 skip=0 fields=nil (0.5791ms)
+Connecting to database specified by database.yml
+
+
+Started POST "/api/v1/posts/create_comment.json" for 127.0.0.1 at 2012-10-11 14:41:14 +0900
+Processing by Api::V1::PostsController#create_comment as JSON
+  Parameters: {"post_id"=>"507291096a8745f40300002b", "auth_token"=>"RQUwjyhiSyDNDWRVL56N", "description"=>"Fucking Funny"}
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (1.0049ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"_id"=>"506e632f6a87457505000001"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.5810ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=action_targets selector={"_id"=>"507291096a8745f40300002b", "_type"=>{"$in"=>["Post"]}} flags=[] limit=0 skip=0 fields=nil (0.5660ms)
+  MOPED: 127.0.0.1:27017 INSERT       database=chococam_development collection=comments documents=[{"_id"=>"50765bfa6a87458a21000005", "description"=>"Fucking Funny", "post_id"=>"507291096a8745f40300002b", "reply_to_id"=>nil, "user_id"=>"506e632f6a87457505000001", "updated_at"=>2012-10-11 05:41:14 UTC, "created_at"=>2012-10-11 05:41:14 UTC}] flags=[] (0.2470ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=movies selector={"$query"=>{"post_id"=>"507291096a8745f40300002b"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (2.5351ms)
+  MOPED: 127.0.0.1:27017 UPDATE       database=chococam_development collection=action_targets selector={"_id"=>"507291096a8745f40300002b"} update={"$set"=>{"comment_count"=>2, "updated_at"=>2012-10-11 05:41:14 UTC}} flags=[] (0.2468ms)
+[paperclip] Saving attachments.
+------------------------------------
+!!! after_save !!!!
+------------------------------------
+  MOPED: 127.0.0.1:27017 INSERT       database=chococam_development collection=actions documents=[{"_id"=>"50765bfa6a87458a21000006", "user_id"=>"506e632f6a87457505000001", "action_type"=>0, "target_type"=>0, "target_id"=>"507291096a8745f40300002b", "updated_at"=>2012-10-11 05:41:14 UTC, "created_at"=>2012-10-11 05:41:14 UTC}] flags=[] (0.2558ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=follows selector={"user_id_to"=>"506e632f6a87457505000001", "blocked"=>false} flags=[] limit=0 skip=0 fields={"user_id_from"=>1, "accepted"=>1} (0.4799ms)
+  MOPED: 127.0.0.1:27017 INSERT       database=chococam_development collection=action_feeds documents=[{"_id"=>"50765bfa6a87458a21000007", "action_id"=>"50765bfa6a87458a21000006", "reader_id"=>"506e64046a87457505000002", "updated_at"=>2012-10-11 05:41:14 UTC, "created_at"=>2012-10-11 05:41:14 UTC}] flags=[] (0.2069ms)
+  MOPED: 127.0.0.1:27017 INSERT       database=chococam_development collection=action_feeds documents=[{"_id"=>"50765bfa6a87458a21000008", "action_id"=>"50765bfa6a87458a21000006", "reader_id"=>"506e632f6a87457505000001", "updated_at"=>2012-10-11 05:41:14 UTC, "created_at"=>2012-10-11 05:41:14 UTC}] flags=[] (0.1919ms)
+Completed 200 OK in 23ms (Views: 0.7ms | ActiveRecord: 0.0ms)
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (1.9677ms)
+  MOPED: 127.0.0.1:27017 COMMAND      database=chococam_development command={:count=>"comments", :query=>{}} (0.5538ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=comments selector={"$query"=>{}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (2.7311ms)
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (0.6127ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=comments selector={"post_id"=>"507291096a8745f40300002b"} flags=[] limit=25 skip=0 fields=nil (0.6361ms)
+
+
+Started POST "/api/v1/posts/comments.json" for 127.0.0.1 at 2012-10-11 14:51:39 +0900
+Processing by Api::V1::PostsController#comments as JSON
+  Parameters: {"id"=>"507291096a8745f40300002b", "auth_token"=>"RQUwjyhiSyDNDWRVL56N"}
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (0.8142ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"_id"=>"506e632f6a87457505000001"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.4220ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=action_targets selector={"_id"=>"507291096a8745f40300002b", "_type"=>{"$in"=>["Post"]}} flags=[] limit=0 skip=0 fields=nil (0.5891ms)
+Completed 500 Internal Server Error in 13ms
+
+NoMethodError (undefined method `comments' for nil:NilClass):
+  app/controllers/api/v1/posts_controller.rb:189:in `comments'
+
+
+  Rendered /Users/brucewang/.rvm/gems/ruby-1.9.3-p125/gems/actionpack-3.2.7/lib/action_dispatch/middleware/templates/rescues/_trace.erb (5.4ms)
+  Rendered /Users/brucewang/.rvm/gems/ruby-1.9.3-p125/gems/actionpack-3.2.7/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (1.6ms)
+  Rendered /Users/brucewang/.rvm/gems/ruby-1.9.3-p125/gems/actionpack-3.2.7/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (23.3ms)
+
+
+Started POST "/api/v1/posts/comments.json" for 127.0.0.1 at 2012-10-11 14:52:45 +0900
+Processing by Api::V1::PostsController#comments as JSON
+  Parameters: {"id"=>"507291096a8745f40300002b", "auth_token"=>"RQUwjyhiSyDNDWRVL56N"}
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (0.8352ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"_id"=>"506e632f6a87457505000001"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.4301ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=action_targets selector={"_id"=>"507291096a8745f40300002b", "_type"=>{"$in"=>["Post"]}} flags=[] limit=0 skip=0 fields=nil (0.6096ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=comments selector={"post_id"=>"507291096a8745f40300002b"} flags=[] limit=25 skip=0 fields=nil (0.6001ms)
+Completed 200 OK in 70ms (Views: 0.9ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/api/v1/posts/comments.json" for 127.0.0.1 at 2012-10-11 14:59:38 +0900
+Processing by Api::V1::PostsController#comments as JSON
+  Parameters: {"id"=>"507291096a8745f40300002b", "auth_token"=>"RQUwjyhiSyDNDWRVL56N"}
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (0.7491ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"_id"=>"506e632f6a87457505000001"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.6042ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=action_targets selector={"_id"=>"507291096a8745f40300002b", "_type"=>{"$in"=>["Post"]}} flags=[] limit=0 skip=0 fields=nil (0.6731ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=comments selector={"post_id"=>"507291096a8745f40300002b"} flags=[] limit=25 skip=0 fields=nil (0.5081ms)
+Completed 200 OK in 9ms (Views: 0.9ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2012-10-12 09:38:18 +0900
+Processing by WelcomeController#index as HTML
+  Rendered welcome/index.html.erb within layouts/application (45.2ms)
+Completed 200 OK in 58ms (Views: 56.9ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/assets/welcome.css?body=1" for 127.0.0.1 at 2012-10-12 09:38:18 +0900
+Served asset /welcome.css - 200 OK (0ms)
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2012-10-12 09:38:18 +0900
+Served asset /application.js - 200 OK (0ms)
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2012-10-12 09:38:18 +0900
+Served asset /application.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2012-10-12 09:38:18 +0900
+Served asset /jquery_ujs.js - 200 OK (0ms)
+
+
+Started GET "/assets/welcome.js?body=1" for 127.0.0.1 at 2012-10-12 09:38:18 +0900
+Served asset /welcome.js - 200 OK (0ms)
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2012-10-12 09:38:18 +0900
+Served asset /jquery.js - 200 OK (0ms)
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (11.3409ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={} flags=[] limit=0 skip=0 fields=nil (3.9020ms)
+  MOPED: 127.0.0.1:27017 COMMAND      database=chococam_development command={:count=>"users", :query=>{}} (0.5679ms)
+Connecting to database specified by database.yml
+
+
+Started POST "/api/v1/posts/comments.json" for 127.0.0.1 at 2012-10-12 16:50:07 +0900
+Processing by Api::V1::PostsController#comments as JSON
+  Parameters: {"id"=>"507291096a8745f40300002b", "auth_token"=>"RQUwjyhiSyDNDWRVL56N"}
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (2.3518ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"_id"=>"506e632f6a87457505000001"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.8669ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=action_targets selector={"_id"=>"507291096a8745f40300002b", "_type"=>{"$in"=>["Post"]}} flags=[] limit=0 skip=0 fields=nil (1.4820ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=comments selector={"post_id"=>"507291096a8745f40300002b"} flags=[] limit=25 skip=0 fields=nil (0.6921ms)
+Completed 200 OK in 82ms (Views: 5.1ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/api/v1/users/find_by_fbid.json" for 127.0.0.1 at 2012-10-12 16:51:16 +0900
+Processing by Api::V1::UsersController#find_by_fbid as JSON
+  Parameters: {"auth_token"=>"RQUwjyhiSyDNDWRVL56N", "fb_ids"=>["1726051469"]}
+WARNING: Can't verify CSRF token authenticity
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (0.8268ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"_id"=>"506e632f6a87457505000001"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.3850ms)
+[paperclip] Saving attachments.
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"authentication_token"=>"RQUwjyhiSyDNDWRVL56N"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (4.3433ms)
+  MOPED: 127.0.0.1:27017 UPDATE       database=chococam_development collection=users selector={"_id"=>"506e632f6a87457505000001"} update={"$set"=>{"last_sign_in_at"=>2012-10-11 05:29:57 UTC, "current_sign_in_at"=>2012-10-12 07:51:16 UTC, "sign_in_count"=>14, "updated_at"=>2012-10-12 07:51:16 UTC}} flags=[] (0.4740ms)
+[paperclip] Saving attachments.
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"fb_user_id"=>{"$in"=>["1726051469"]}} flags=[] limit=0 skip=0 fields={"_id"=>1} (0.5720ms)
+Completed 200 OK in 33ms (Views: 0.7ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/api/v1/users/find_by_fbid.json" for 127.0.0.1 at 2012-10-12 16:52:57 +0900
+Processing by Api::V1::UsersController#find_by_fbid as JSON
+  Parameters: {"auth_token"=>"RQUwjyhiSyDNDWRVL56N", "fb_ids"=>["1726051469"]}
+WARNING: Can't verify CSRF token authenticity
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (2.4309ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"authentication_token"=>"RQUwjyhiSyDNDWRVL56N"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.5829ms)
+  MOPED: 127.0.0.1:27017 UPDATE       database=chococam_development collection=users selector={"_id"=>"506e632f6a87457505000001"} update={"$set"=>{"last_sign_in_at"=>2012-10-12 07:51:16 UTC, "current_sign_in_at"=>2012-10-12 07:52:57 UTC, "sign_in_count"=>15, "updated_at"=>2012-10-12 07:52:57 UTC}} flags=[] (0.3030ms)
+[paperclip] Saving attachments.
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"fb_user_id"=>{"$in"=>["1726051469"]}} flags=[] limit=0 skip=0 fields={"_id"=>1} (0.5791ms)
+Completed 200 OK in 28ms (Views: 2.2ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/api/v1/users/find_by_fbid.json" for 127.0.0.1 at 2012-10-12 16:52:57 +0900
+Processing by Api::V1::UsersController#find_by_fbid as JSON
+  Parameters: {"auth_token"=>"RQUwjyhiSyDNDWRVL56N", "fb_ids"=>["1726051469"]}
+WARNING: Can't verify CSRF token authenticity
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (2.1520ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"authentication_token"=>"RQUwjyhiSyDNDWRVL56N"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (1.1430ms)
+  MOPED: 127.0.0.1:27017 UPDATE       database=chococam_development collection=users selector={"_id"=>"506e632f6a87457505000001"} update={"$set"=>{"last_sign_in_at"=>2012-10-12 07:52:57 UTC, "current_sign_in_at"=>2012-10-12 07:52:57 UTC, "sign_in_count"=>16, "updated_at"=>2012-10-12 07:52:57 UTC}} flags=[] (0.3951ms)
+[paperclip] Saving attachments.
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"fb_user_id"=>{"$in"=>["1726051469"]}} flags=[] limit=0 skip=0 fields={"_id"=>1} (0.7610ms)
+Completed 200 OK in 27ms (Views: 2.3ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/api/v1/users/find_by_fbid.json" for 127.0.0.1 at 2012-10-12 16:55:25 +0900
+Processing by Api::V1::UsersController#find_by_fbid as JSON
+  Parameters: {"auth_token"=>"RQUwjyhiSyDNDWRVL56N", "fb_ids"=>["1726051469"]}
+WARNING: Can't verify CSRF token authenticity
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (0.7858ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"authentication_token"=>"RQUwjyhiSyDNDWRVL56N"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.5531ms)
+  MOPED: 127.0.0.1:27017 UPDATE       database=chococam_development collection=users selector={"_id"=>"506e632f6a87457505000001"} update={"$set"=>{"last_sign_in_at"=>2012-10-12 07:52:57 UTC, "current_sign_in_at"=>2012-10-12 07:55:25 UTC, "sign_in_count"=>17, "updated_at"=>2012-10-12 07:55:25 UTC}} flags=[] (0.2618ms)
+[paperclip] Saving attachments.
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"fb_user_id"=>{"$in"=>["1726051469"]}} flags=[] limit=0 skip=0 fields={"_id"=>1} (0.6299ms)
+Completed 200 OK in 20ms (Views: 2.1ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/api/v1/users/find_by_fbid.json" for 127.0.0.1 at 2012-10-12 16:56:14 +0900
+Processing by Api::V1::UsersController#find_by_fbid as JSON
+  Parameters: {"auth_token"=>"RQUwjyhiSyDNDWRVL56N", "fb_ids"=>["1726051469"]}
+WARNING: Can't verify CSRF token authenticity
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (0.9010ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"authentication_token"=>"RQUwjyhiSyDNDWRVL56N"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (1.1342ms)
+  MOPED: 127.0.0.1:27017 UPDATE       database=chococam_development collection=users selector={"_id"=>"506e632f6a87457505000001"} update={"$set"=>{"last_sign_in_at"=>2012-10-12 07:55:25 UTC, "current_sign_in_at"=>2012-10-12 07:56:14 UTC, "sign_in_count"=>18, "updated_at"=>2012-10-12 07:56:14 UTC}} flags=[] (0.2990ms)
+[paperclip] Saving attachments.
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"fb_user_id"=>{"$in"=>["1726051469"]}} flags=[] limit=0 skip=0 fields={"_id"=>1} (0.5412ms)
+Completed 200 OK in 20ms (Views: 0.8ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/api/v1/users/find_by_fbid.json" for 127.0.0.1 at 2012-10-12 16:56:39 +0900
+Processing by Api::V1::UsersController#find_by_fbid as JSON
+  Parameters: {"auth_token"=>"RQUwjyhiSyDNDWRVL56N", "fb_ids"=>["1726051469"]}
+WARNING: Can't verify CSRF token authenticity
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{"authentication_token"=>"RQUwjyhiSyDNDWRVL56N"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (1.0633ms)
+  MOPED: 127.0.0.1:27017 UPDATE       database=chococam_development collection=users selector={"_id"=>"506e632f6a87457505000001"} update={"$set"=>{"last_sign_in_at"=>2012-10-12 07:56:14 UTC, "current_sign_in_at"=>2012-10-12 07:56:39 UTC, "sign_in_count"=>19, "updated_at"=>2012-10-12 07:56:39 UTC}} flags=[] (0.2978ms)
+[paperclip] Saving attachments.
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"fb_user_id"=>{"$in"=>["1726051469"]}} flags=[] limit=0 skip=0 fields={"_id"=>1, "fb_user_id"=>1} (0.6280ms)
+Completed 200 OK in 20ms (Views: 0.8ms | ActiveRecord: 0.0ms)
+Connecting to database specified by database.yml
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (1.2898ms)
+  MOPED: 127.0.0.1:27017 COMMAND      database=chococam_development command={:count=>"comments", :query=>{}} (0.2959ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=comments selector={"$query"=>{}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (2.5532ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=action_targets selector={"_id"=>"507291096a8745f40300002b", "_type"=>{"$in"=>["Post"]}} flags=[] limit=0 skip=0 fields=nil (0.6580ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=comments selector={"post_id"=>"507291096a8745f40300002b"} flags=[] limit=25 skip=0 fields=nil (3.5970ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=comments selector={"post_id"=>"507291096a8745f40300002b"} flags=[] limit=25 skip=0 fields=nil (0.9699ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=comments selector={"post_id"=>"507291096a8745f40300002b"} flags=[] limit=25 skip=0 fields=nil (0.9251ms)
+Connecting to database specified by database.yml
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (1.2901ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=comments selector={} flags=[] limit=0 skip=0 fields=nil (0.4520ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"_id"=>"506e632f6a87457505000001"} flags=[] limit=0 skip=0 fields=nil (0.7641ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"_id"=>"506e632f6a87457505000001"} flags=[] limit=0 skip=0 fields=nil (0.5510ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=action_targets selector={"$query"=>{"_type"=>{"$in"=>["Post"]}}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (1.0612ms)
+  MOPED: 127.0.0.1:27017 COMMAND      database=chococam_development command={:count=>"comments", :query=>{"post_id"=>"507291096a8745f40300002b"}} (0.5970ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=comments selector={"post_id"=>"507291096a8745f40300002b"} flags=[] limit=25 skip=0 fields=nil (0.7722ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"_id"=>"506e632f6a87457505000001"} flags=[] limit=0 skip=0 fields=nil (2.5141ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"_id"=>"506e632f6a87457505000001"} flags=[] limit=0 skip=0 fields=nil (0.5844ms)
+Connecting to database specified by database.yml
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (2.2399ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={} flags=[] limit=25 skip=0 fields=nil (1.4439ms)
+  MOPED: 127.0.0.1:27017 COMMAND      database=chococam_development command={:count=>"users", :query=>{}} (0.6199ms)
+  MOPED: 127.0.0.1:27017 COMMAND      database=chococam_development command={:count=>"users", :query=>{}} (17.3688ms)
+  MOPED: 127.0.0.1:27017 COMMAND      database=chococam_development command={:count=>"users", :query=>{}} (0.6831ms)
+  MOPED: 127.0.0.1:27017 COMMAND      database=chococam_development command={:count=>"users", :query=>{}} (0.6113ms)
+  MOPED: 127.0.0.1:27017 COMMAND      database=chococam_development command={:count=>"users", :query=>{}} (0.6237ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={} flags=[] limit=25 skip=75 fields=nil (0.5388ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={} flags=[] limit=25 skip=0 fields=nil (2.4898ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={} flags=[] limit=25 skip=0 fields=nil (1.4782ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={} flags=[] limit=25 skip=0 fields=nil (1.5600ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={} flags=[] limit=25 skip=25 fields=nil (0.8318ms)
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (1.6389ms)
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (1.0149ms)
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (1.0049ms)
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (4.4842ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=users selector={"$query"=>{}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (168.9420ms)
+  MOPED: 127.0.0.1:27017 COMMAND      database=chococam_development command={:count=>"likes", :query=>{}} (1.0660ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=action_targets selector={"$query"=>{"_type"=>{"$in"=>["Post"]}}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (2.0401ms)
+  MOPED: 127.0.0.1:27017 INSERT       database=chococam_development collection=likes documents=[{"_id"=>"507d309d6a87452bda000002", "user_id"=>"506e632f6a87457505000001", "post_id"=>"507291096a8745f40300002b", "updated_at"=>2012-10-16 10:02:09 UTC, "created_at"=>2012-10-16 10:02:09 UTC}] flags=[] (0.5779ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=likes selector={"user_id"=>"506e632f6a87457505000001", "post_id"=>"507291096a8745f40300002b"} flags=[] limit=0 skip=0 fields=nil (1.2228ms)
+  MOPED: 127.0.0.1:27017 COMMAND      database=chococam_development command={:count=>"likes", :query=>{"user_id"=>"506e632f6a87457505000001", "post_id"=>"507291096a8745f40300002b"}} (1.3258ms)
+  MOPED: 127.0.0.1:27017 DELETE       database=chococam_development collection=likes selector={"user_id"=>"506e632f6a87457505000001", "post_id"=>"507291096a8745f40300002b"} flags=[] (0.2310ms)
+  MOPED: 127.0.0.1:27017 COMMAND      database=chococam_development command={:count=>"likes", :query=>{}} (0.4044ms)
+  MOPED: 127.0.0.1:27017 INSERT       database=chococam_development collection=likes documents=[{"_id"=>"507d310b6a87452bda000003", "user_id"=>"506e632f6a87457505000001", "post_id"=>"507291096a8745f40300002b", "updated_at"=>2012-10-16 10:03:59 UTC, "created_at"=>2012-10-16 10:03:59 UTC}] flags=[] (1.1981ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=likes selector={"$query"=>{"user_id"=>"506e632f6a87457505000001", "post_id"=>"507291096a8745f40300002b"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.9959ms)
+  MOPED: 127.0.0.1:27017 COMMAND      database=admin command={:ismaster=>1} (0.3769ms)
+  MOPED: 127.0.0.1:27017 COMMAND      database=chococam_development command={:count=>"likes", :query=>{}} (1.3700ms)
+  MOPED: 127.0.0.1:27017 COMMAND      database=chococam_development command={:count=>"likes", :query=>{}} (0.3822ms)
+  MOPED: 127.0.0.1:27017 DELETE       database=chococam_development collection=likes selector={} flags=[] (0.2959ms)
+  MOPED: 127.0.0.1:27017 COMMAND      database=chococam_development command={:count=>"likes", :query=>{}} (0.3929ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=likes selector={"$query"=>{"user_id"=>"506e632f6a87457505000001", "post_id"=>"507291096a8745f40300002b"}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.9370ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=likes selector={"$query"=>{}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (0.4239ms)
+  MOPED: 127.0.0.1:27017 QUERY        database=chococam_development collection=action_targets selector={"$query"=>{"_type"=>{"$in"=>["Post"]}}, "$orderby"=>{:_id=>1}} flags=[] limit=-1 skip=0 fields=nil (1.7931ms)

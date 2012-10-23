@@ -1,0 +1,11 @@
+1) 2012년 5월 17일 저녁 9시 10분.
+   IN소프트에서의 첫 데모를 위해 태그를 생성하였음.
+   svn copy http://64.23.68.147/repos/g/trunk http://64.23.68.147/repos/g/tags/2012051
+2) 2012년 6월 6일 저녁 8시
+   안드로이드 마켓에 최초 등록.
+   svn copy http://64.23.68.147/repos/g/trunk http://64.23.68.147/repos/g/tags/20120606_androidmarket_first_release
+
+3) 2012년 6월 25일 오전 11:39
+   main trunk로부터 AMQP를 사용하는 브랜치를 생성함.
+   svn copy http://64.23.68.147/repos/g/trunk http://64.23.68.147/repos/g/branches/g_amqp
+
