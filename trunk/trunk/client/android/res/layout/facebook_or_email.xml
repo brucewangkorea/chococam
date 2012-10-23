@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_gray"
+    android:orientation="vertical" >
+
+    <include layout="@layout/title_bar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/buttonFbLogout"
+            android:layout_width="match_parent"
+            android:layout_height="48dip"
+            android:layout_marginLeft="16dip"
+            android:layout_marginRight="16dip"
+            android:background="@drawable/fb_login_button"
+            android:text="@string/login_to_facebook"
+            android:textColor="#ffffffff" />
+
+        <RelativeLayout
+            android:id="@+id/relativeUseFacebook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" >
+
+            <Button
+                android:id="@+id/buttonLogInOutFacebook"
+                android:layout_width="wrap_content"
+                android:layout_height="48dip"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="16dip"
+                android:layout_toRightOf="@+id/imageFacebook"
+                android:background="@drawable/fb_logout_button"
+                android:text="@string/login_to_facebook"
+                android:textColor="#ffffffff" />
+
+            <com.chocopepper.chococam.util.ImageViewRounded
+                android:id="@+id/imageFacebook"
+                android:layout_width="48dip"
+                android:layout_height="48dip"
+                android:layout_marginLeft="16dip"
+                android:src="@drawable/facebook_icon1" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,4 @@
+android update project --target 7 --path ./ 
+cp ./lib/*.jar ./libs
+ant release
+

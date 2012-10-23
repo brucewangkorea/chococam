@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_gray"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/rltopbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <include layout="@layout/title_bar" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"            
+            android:background="@drawable/setting_menu"            
+            android:padding="4dp" >
+
+            <EditText
+                android:id="@+id/etxtTitle"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_below="@+id/TextView01"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="10dp"                
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/phone_number_inputbox"
+                android:ems="10"
+                android:inputType="textEmailAddress"
+                android:paddingLeft="10dip">
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:id="@+id/TextView01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="10dip"
+                android:layout_marginTop="10dip"
+                android:text="@string/video_title"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#ff000000"
+                android:textSize="15dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/setting_menu"
+            android:padding="4dp" >
+
+            <EditText
+                android:id="@+id/etxtMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"                
+                android:layout_below="@+id/TextView01"
+                android:layout_marginTop="10dip"
+                android:background="@drawable/inputbox"
+                android:ems="10"
+                android:gravity="top|left"
+                android:minHeight="120dip"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip" >
+            </EditText>
+
+            <TextView
+                android:id="@+id/TextView01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="10dip"
+                android:layout_marginTop="10dip"
+                android:text="@string/video_comment"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#ff000000"
+                android:textSize="15dp" />
+
+            <Button
+                android:id="@+id/btnSend"
+                android:layout_width="wrap_content"
+                android:layout_height="48dip"
+                android:layout_below="@+id/etxtMessage"
+                android:layout_margin="10dp"
+                android:background="@drawable/verifycode_re_send_code"
+                android:text="@string/send"
+                android:textColor="#6a6261" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>
