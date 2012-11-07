@@ -317,52 +317,34 @@ class Api::V1::PostsController < ApplicationController
   
   # 2012-09-14 brucewang
   def unlike
-  	case params[:type]
+    case params[:type]
     when "post"
-    	unlike_post(current_user.id, params[:id])
+      unlike_post(current_user.id, params[:id])
     when "comment"
-	    unlike_comment(current_user.id, params[:id])
+      unlike_comment(current_user.id, params[:id])
     else
-    	render :json=>{:data=>"ok"}
+      render :status=>406, :json=>{:data=>"unsupported parameter"}
     end
   end
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   # 2012-10-16 brucewang
   def unlike_post(userid, id)
-  	@like = Like.where(:user_id=>userid,:post_id=>id).first
+    @like = Like.find id
     if @like.nil?
       render :status=>406, :json=>{:data=>"record not found"}
       return
     end
     
-    
     # 해당 ActionFeed도 모두 제거.
-  	action = Action.where( :action_type => Action::ACT_TYPE_LIKE, :target_id=>@like.id ).first
-  	unless action.nil?
-  		ActionFeed.where( :action_id=>action._id ).delete_all
-  		action.delete
-  	end
+    action = Action.where( :action_type => Action::ACT_TYPE_LIKE, :target_id=>@like.id ).first
+    unless action.nil?
+      ActionFeed.where( :action_id=>action._id ).delete_all
+      action.delete
+    end
 
     # 해당 포스트의 좋아요 카운트를 감소시킴.
-    if  @like.post.like_count>0 && @like.comment.nil?
+    if @like.post.like_count>0 
       @like.post.like_count-=1
       @like.post.save
     end
@@ -376,21 +358,21 @@ class Api::V1::PostsController < ApplicationController
   
   # 2012-10-16 brucewang
   def unlike_comment(userid, id)
-	  @like = Like.where(:user_id=>userid,:comment_id=>id).first
+    @like = Like.find id
     if @like.nil?
       render :status=>406, :json=>{:data=>"record not found"}
       return
     end
     
     # 해당 ActionFeed도 모두 제거.
-  	action = Action.where( :action_type => Action::ACT_TYPE_LIKE, :target_id=>@like.id ).first
-  	unless action.nil?
-  		ActionFeed.where( :action_id=>action._id ).delete_all
-  		action.delete
-  	end
+    action = Action.where( :action_type => Action::ACT_TYPE_LIKE, :target_id=>@like.id ).first
+    unless action.nil?
+      ActionFeed.where( :action_id=>action._id ).delete_all
+      action.delete
+    end
     
     # 해당 포스트의 좋아요 카운트를 감소시킴.
-    if  @like.post.like_count>0 && @like.comment.nil?
+    if  @like.post.like_count>0 
       @like.post.like_count-=1
       @like.post.save
     end

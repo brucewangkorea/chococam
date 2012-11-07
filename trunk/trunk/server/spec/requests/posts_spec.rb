@@ -145,13 +145,14 @@ describe "Posts" do
   		like_id = parsed_body["data"]["likes"][0]["_id"]
   		
   		# user3가 자신의 '좋아요' 를 취소.
-  		post '/api/v1/posts/unlike.json', :auth_token=>token, :id=>like_id
+  		post '/api/v1/posts/unlike.json', :auth_token=>token, :id=>like_id, :type=>"post"
   		
   		# 해당 포스트의 좋아요 갯수가 1개이어야 함.
   		get '/api/v1/posts/show.json', :auth_token=>token, :id=>post_id
   		response.status.should be(200)
   		parsed_body = JSON.parse(response.body)
   		#parsed_body["data"]["likes"].count.should eql 1
+  		puts response.body
   		parsed_body["data"]["like_count"].should eql 1
   	end
   	
