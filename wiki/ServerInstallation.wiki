@@ -1,0 +1,137 @@
+#summary 서버 설치및 실행 방법
+
+
+= Ruby 설치 = 
+Ruby 버전은 1.9.3 이상이어야 한다.
+
+# Install libyml
+cd /usr/local/src
+wget http://pyyaml.org/download/libyaml/yaml-0.1.4.tar.gz
+tar xzvf yaml-0.1.4.tar.gz
+cd yaml-0.1.4
+./configure --prefix=/usr/local
+make
+make install
+cd ..
+
+#Install Ruby 1.9.3 
+wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p0.tar.gz
+tar xzvf ruby-1.9.3-p0.tar.gz
+cd ruby-1.9.3-p0
+./configure --prefix=/usr/local --enable-shared --disable-install-doc --with-opt-dir=/usr/local/lib
+make
+make install
+cd ..
+
+= RubyGem 설치 =
+
+wget https://rubyforge.org/frs/download.php/74922/rubygems-1.8.4.tgz --no-check-certificate
+tar xzvf rubygems-*.tgz
+cd rubygems-*
+/usr/local/bin/ruby setup.rb
+cd ..
+
+#Check if RubyGems has any updates available to the system and to any Gems that may have already been installed:
+
+/usr/local/bin/gem update --system
+/usr/local/bin/gem update
+
+= Rails 설치 =
+
+/usr/local/bin/gem install rails passenger
+
+= Mysql서버및 mysql gem설치 =
+
+rpm -Uvh http://repo.webtatic.com/yum/centos/5/latest.rpm
+yum install mysql mysql-server mysql-devel --enablerepo=webtatic
+chkconfig --levels 235 mysqld on
+cp my.cnf /etc/my.cnf
+mysql_install_db
+
+# mysql gem 설치
+/usr/local/bin/gem install mysql -- --with-mysql-config=/usr/bin/mysql_config
+
+= imagemagick, rmagick 설치 =
+rpm -Uvh http://rbel.co/rbel5
+yum install ImageMagick-devel ImageMagick-c++-devel
+gem install rmagick
+
+= mongodb 인스톨 =
+# mongodb를 yum으로 설치할 수 있도록 repository 정보를 다음과 같이 변경.
+> vim /etc/yum.repos.d/10gen.repo
+[10gen]
+name=10gen Repository
+baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64
+gpgcheck=0
+enabled=1
+
+# mongodb 설치
+yum install mongo-10gen mongo-10gen-server
+
+# mongodb 서비스 실행
+service mongod start
+# Permission denied로 실행이 안되면
+# vim /etc/init.d/mongod 에서 실행 사용자명과 그룹을 root로 변경.
+
+= 서버소스 설치 및 bundle 설치 =
+서버소스를 SVN 리파지토리에서 checkout (svn checkout http://chococam.googlecode.com/svn/trunk/ chococam-read-only
+)받거나 zip으로 서버에 설치한 다음, 서버소스 디렉토리로 이동하여 다음과같은 명령을 수행한다.
+
+sudo yum install libxml libxml-devel libxslt libxslt-devel nodejs
+yum -y install gcc-c++
+bundle install
+
+= delayed_job for mongoid 설치 =
+먼저 mysql 접속이 가능한지 mysql 코맨드라인으로 접속 테스트,
+rails 프로젝트 소스의 config/database.yml 파일 설정도 체크한다. 
+
+예를들면, rails에서 mysql에 접속할때 사용하는 계정 id와 password를 바꾸기 위해 database.yml을 수정하거나, 직접 mysql 콘솔에서 원하는 유저의 비밀번호 또는 권한을 변경한다.
+
+UPDATE mysql.user SET Password=PASSWORD('password')
+  WHERE User='root' AND Host='localhost';
+FLUSH PRIVILEGES;
+
+다음으로, 다음의 명령을 서버소스 프로젝트 디렉토리에서 수행.
+
+rake db:create
+rake db:create RAILS_ENV=production
+script/rails runner 'Delayed::Backend::Mongoid::Job.create_indexes'
+
+= ffmpeg 설치 =
+rpm --import http://apt.sw.be/RPM-GPG-KEY.dag.txt
+> vi /etc/yum.repos.d/Centos-DAG.repo
+[dag]
+name=Dag RPM Repository for Red Hat Enterprise Linux
+baseurl=http://apt.sw.be/redhat/el$releasever/en/$basearch/dag
+gpgcheck=1
+enabled=1
+> yum -y install ffmpeg
+
+# ffmpeg 경로 지정
+which ffmpeg
+vim config/environments/development.rb 
+
+
+= 부팅시 자동 실행을 위해 crontab 설정 =
+
+> crontab -e
+@reboot cd {서버 프로젝트의 루트디렉토리}; rm -f log/*; start.sh
+5.1.11	기타 설정
+Rails 서버의 설정은  소스루트디렉토리의 config/database.yml (MySQL 서버 접속 정보), config/environments/*.rb 등에 들어가게 된다. MySql은 실제로는 사용하지 않으나, Rails가 구동될 때 기본 ORM인 MySQL을 확인하게 되어 있어 부득이하게 초기 설정이 필요하다. 따라서 config/database.yml 설정에서 MySQL 접속 정보를 상황에 맞게 변경하고, 소스 루트 디렉토리에서 다음 명령을 수행한다.
+
+rake db:create
+
+
+= 서버 구동 =
+서버는 rails 명령으로 다음과 실행하면 된다. 각종 옵션들은 Rails 관련 다큐먼트를 참고한다.
+
+./start.sh
+
+기본적으로 Rails 서버는 TCP 3000 번 포트를 사용하게 된다.
+
+= 서버 자동 테스트 =
+서버 소스디렉토리에서 다음과 같이 미리 만들어 놓은 테스트 시나리오를 수행해 볼 수 있다.
+
+bundle exec rspec spec/requests/*
+
+
