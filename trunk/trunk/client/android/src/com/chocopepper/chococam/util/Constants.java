@@ -91,9 +91,9 @@ public class Constants {
     
     // 2012-10-04 brucewang
     // test서버.
-    public final static String SOCIAL_SERVER_DOMAINORIP = "218.36.25.68";//
+    //public final static String SOCIAL_SERVER_DOMAINORIP = "218.36.25.68";//
     // 호스트웨이 서버
-    //public final static String SOCIAL_SERVER_DOMAINORIP = "64.23.68.147";//
+    public final static String SOCIAL_SERVER_DOMAINORIP = "64.23.68.147";//
     
 	public final static String SOCIAL_SERVER_URL = "http://"+SOCIAL_SERVER_DOMAINORIP+":3000";
     

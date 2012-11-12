@@ -38,7 +38,6 @@ import org.apache.http.ProtocolException;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CookieStore;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.RedirectHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
@@ -552,6 +551,9 @@ public class RestfulClient {
 			conn.setRequestProperty("Content-Type","multipart/form-data;boundary=" + boundary);
 			conn.setConnectTimeout(mTimeout);
 			conn.setReadTimeout(mTimeout);
+			// 2012-11-12 brucewang
+			// bug fix for 'OutOfMemory'
+			conn.setChunkedStreamingMode(4096);
 			
 			
 			if( mUserId!=null && mUserId.length()>0 ){
@@ -626,13 +628,23 @@ public class RestfulClient {
 	
 				byte[] buffer = new byte[bufferSize];
 				int bytesRead = mFileInputStream.read(buffer, 0, bufferSize);
+				
 	
 				// read image
+				long bytestotal = 0;
 				while (bytesRead > 0) {
 					dos.write(buffer, 0, bufferSize);
 					bytesAvailable = mFileInputStream.available();
 					bufferSize = Math.min(bytesAvailable, maxBufferSize);
 					bytesRead = mFileInputStream.read(buffer, 0, bufferSize);
+					bytestotal += bufferSize;
+					
+					// 2012-11-12 brucewang
+					// bug fix for 'OutOfMemory'
+					if(bytestotal> 4096 ){
+						dos.flush(); // finish upload...
+						System.gc();
+					}
 				}
 				
 				mFileInputStream.close();
