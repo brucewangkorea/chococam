@@ -18,8 +18,8 @@ Chococam::Application.configure do
 		domain: "smtp.gmail.com",
 		authentication: "plain",
 		enable_starttls_auto: true,
-		user_name: "redmine@chocopepper.com",
-		password: "redmine108"
+		user_name: "t@t.com",
+		password: "t"
 	}
   
   # 2012-08-31 brucewang

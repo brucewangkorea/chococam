@@ -11,9 +11,22 @@ Chococam::Application.configure do
 		domain: "smtp.gmail.com",
 		authentication: "plain",
 		enable_starttls_auto: true,
-		user_name: "redmine@chocopepper.com",
-		password: "redmine108"
+		user_name: "tst@t.com",
+		password: "t"
 	}
+  
+  # Devise 관련 설정.
+  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  
+  # 2012-08-31 brucewang
+  # localization 스트링이 없을때 기본 스트링 정보를 사용하도록 함.
+  config.i18n.fallbacks = true
+  
+  # 2012-09-11 brucewang
+  # papaerclip 에서 ffmpeg 을 사용하기 위해 필요한 환경변수.
+  Paperclip.options[:command_path] = "/usr/bin"
+  
+  
 
   # Code is not reloaded between requests
   config.cache_classes = true
