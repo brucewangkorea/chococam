@@ -1,2 +1,3 @@
 script/delayed_job restart
-rails s -e production  -d
+rails s -d
+#rails s -e production  -d
