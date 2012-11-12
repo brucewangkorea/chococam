@@ -107,7 +107,7 @@ sudo apt-get -y install autoconf build-essential checkinstall git libfaac-dev li
   librtmp-dev libsdl1.2-dev libtheora-dev libtool libva-dev libvdpau-dev libvorbis-dev \
   libx11-dev libxext-dev libxfixes-dev pkg-config texi2html yasm zlib1g-dev
 }}}
-x264 설치
+== x264 설치 ==
 {{{
 cd
 git clone --depth 1 git://git.videolan.org/x264
@@ -118,7 +118,7 @@ sudo checkinstall --pkgname=x264 --pkgversion="3:$(./version.sh | \
   awk -F'[" ]' '/POINT/{print $4"+git"$5}')" --backup=no --deldoc=yes \
   --fstrans=no --default
 }}}
-fdk-aac 설치
+== fdk-aac 설치 ==
 {{{
 cd
 git clone --depth 1 git://github.com/mstorsjo/fdk-aac.git
@@ -130,7 +130,7 @@ sudo checkinstall --pkgname=fdk-aac --pkgversion="$(date +%Y%m%d%H%M)-git" --bac
   --deldoc=yes --fstrans=no --default
 
 }}}
-libvpx 설치
+== libvpx 설치 ==
 {{{
 cd
 git clone --depth 1 http://git.chromium.org/webm/libvpx.git
@@ -141,7 +141,7 @@ sudo checkinstall --pkgname=libvpx --pkgversion="1:$(date +%Y%m%d%H%M)-git" --ba
   --deldoc=yes --fstrans=no --default
 }}}
 
-FFmpeg 설치
+== FFmpeg 설치 ==
 Ubuntu Server 의 경우는 --enable-x11grab 파라미터를 빼셔야 합니다.
 {{{
 cd
@@ -157,7 +157,7 @@ sudo checkinstall --pkgname=ffmpeg --pkgversion="7:$(date +%Y%m%d%H%M)-git" --ba
 hash x264 ffmpeg ffplay ffprobe
 }}}
 
-qt-faststart
+== qt-faststart ==
 {{{
 cd ~/ffmpeg
 make tools/qt-faststart
@@ -167,7 +167,5 @@ sudo checkinstall --pkgname=qt-faststart --pkgversion="$(date +%Y%m%d%H%M)-git" 
 
 }}}
 이후의 과정은 프로젝트 가이드의 문서 내용과 동일합니다.
-
-
 
 
