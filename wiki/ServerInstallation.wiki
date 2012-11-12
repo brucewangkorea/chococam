@@ -1,4 +1,4 @@
-#summary 서버 설치및 실행 방법
+#summary 서버 설치및 실행 방법 (CentOS)
 
 
 = Ruby 설치 = 
