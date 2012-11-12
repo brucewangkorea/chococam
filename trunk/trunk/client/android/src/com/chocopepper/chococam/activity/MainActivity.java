@@ -517,7 +517,15 @@ public class MainActivity extends TabActivity implements OnTabChangeListener {
 			return;
 		}
 		
-		if( strType.contains("video") ){			
+		if( strType.contains("video") ){
+			// 2012-11-12 brucewang
+			// 파일 사이즈 제한.
+			File file = new File(strTmpImgPath);
+			long length = file.length();
+			if( length> Constants.MAXIMUM_UPLAODFILE_SIZE ){
+				Toast.makeText(MainActivity.this, "File size is too big. 10Mb under is desireable", Toast.LENGTH_SHORT).show();
+				return;
+			}
 			Intent i = new Intent(MainActivity.this, PhotoUploadActivity.class);
 			i.putExtra("video_path", strTmpImgPath);
 			startActivity(i);

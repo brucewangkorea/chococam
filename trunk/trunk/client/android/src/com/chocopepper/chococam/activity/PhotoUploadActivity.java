@@ -1,5 +1,6 @@
 package com.chocopepper.chococam.activity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,9 +15,11 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chocopepper.chococam.R;
 import com.chocopepper.chococam.network.SocialServerApis;
+import com.chocopepper.chococam.util.Constants;
 import com.chocopepper.chococam.util.Logger;
 import com.chocopepper.chococam.util.MyProgressDialog;
 
@@ -84,6 +87,8 @@ public class PhotoUploadActivity extends Activity {
 		btnSend.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				
+				
 				new UploadVideoTask().execute(video_path, mEditTitle.getText().toString(), mEditMessage.getText().toString());				
 			}
 		});
