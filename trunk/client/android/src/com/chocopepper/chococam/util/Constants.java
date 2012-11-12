@@ -90,8 +90,12 @@ public class Constants {
 	//public final static String SOCIAL_SERVER_URL = "http://64.23.79.32";
     
     // 2012-10-04 brucewang
-    // my MacBook
-	public final static String SOCIAL_SERVER_URL = "http://64.23.68.147:3000";
+    // test서버.
+    public final static String SOCIAL_SERVER_DOMAINORIP = "218.36.25.68";//
+    // 호스트웨이 서버
+    //public final static String SOCIAL_SERVER_DOMAINORIP = "64.23.68.147";//
+    
+	public final static String SOCIAL_SERVER_URL = "http://"+SOCIAL_SERVER_DOMAINORIP+":3000";
     
     
     

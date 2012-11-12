@@ -9,11 +9,25 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.Socket;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
@@ -24,21 +38,30 @@ import org.apache.http.ProtocolException;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CookieStore;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.RedirectHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 
 import android.content.Context;
@@ -47,7 +70,85 @@ import android.webkit.CookieSyncManager;
 
 import com.chocopepper.chococam.util.Logger;
 
+
 public class RestfulClient {
+	
+	public static class MySSLSocketFactory extends SSLSocketFactory {
+	    SSLContext sslContext = SSLContext.getInstance("TLS");
+
+	    public MySSLSocketFactory(KeyStore truststore) throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException, UnrecoverableKeyException {
+	        super(truststore);
+
+	        TrustManager tm = new X509TrustManager() {
+	            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+	            }
+
+	            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+	            }
+
+	            public X509Certificate[] getAcceptedIssuers() {
+	                return null;
+	            }
+	        };
+
+	        sslContext.init(null, new TrustManager[] { tm }, null);
+	    }
+
+	    @Override
+	    public Socket createSocket(Socket socket, String host, int port, boolean autoClose) throws IOException, UnknownHostException {
+	        return sslContext.getSocketFactory().createSocket(socket, host, port, autoClose);
+	    }
+
+	    @Override
+	    public Socket createSocket() throws IOException {
+	        return sslContext.getSocketFactory().createSocket();
+	    }
+	}
+	
+	
+	public DefaultHttpClient getNewHttpClient(Context ctx, int timeout) {
+	    try {
+	        KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+	        trustStore.load(null, null);
+
+	        SSLSocketFactory sf = new MySSLSocketFactory(trustStore);
+	        sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+
+	        HttpParams params = new BasicHttpParams();
+	        HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+	        HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
+
+	        SchemeRegistry registry = new SchemeRegistry();
+	        registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+	        registry.register(new Scheme("https", sf, 443));
+
+	        ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
+	        
+	        
+
+			mTimeout = timeout;
+			
+			// 2012-10-09 brucewang
+			// 속도 향상.
+			params.setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
+			
+			
+			HttpConnectionParams.setConnectionTimeout(params, mTimeout);
+			int timeoutSocket = timeout;
+			HttpConnectionParams.setSoTimeout(params, timeoutSocket);
+			HttpConnectionParams.setSocketBufferSize(params, 1024 * 64);
+
+			CookieSyncManager.createInstance(ctx);
+			cookieManager = CookieManager.getInstance();
+			CookieSyncManager.getInstance().startSync();
+
+			
+	        return new DefaultHttpClient(ccm, params);
+	    } catch (Exception e) {
+	        return new DefaultHttpClient();
+	    }
+	}
+	
 	private static final String TAG = Logger.makeLogTag(RestfulClient.class);
 	private static int DEFAULT_TIMEOUT = 100000;
 	
@@ -153,26 +254,11 @@ public class RestfulClient {
 
 		mCtx = ctx;
 
-		// 2010-12-06 brucewang
-		// timeout setting
-		HttpParams httpParameters = new BasicHttpParams();
-		mTimeout = timeout;
-		
-		// 2012-10-09 brucewang
-		// 속도 향상.
-		httpParameters.setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
 		
 		
-		HttpConnectionParams.setConnectionTimeout(httpParameters, mTimeout);
-		int timeoutSocket = timeout;
-		HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
-		HttpConnectionParams.setSocketBufferSize(httpParameters, 1024 * 64);
-
-		CookieSyncManager.createInstance(ctx);
-		cookieManager = CookieManager.getInstance();
-		CookieSyncManager.getInstance().startSync();
-
-		mHttpClient = new DefaultHttpClient(httpParameters);
+		
+		mHttpClient = getNewHttpClient(ctx, timeout);
+		//mHttpClient = new DefaultHttpClient(httpParameters);
 
 		// 2010-10-05 brucewang
 		// Prevent Http redirect to start automatically.
@@ -262,6 +348,7 @@ public class RestfulClient {
 			        new UsernamePasswordCredentials(mstrAuthUsername, mstrAuthPassword));
 			mbUseHttpAuth=false;
 		}
+		
 
 		// synchronized (mSyncObject) {
 		HttpResponse httpResponse = null;
@@ -315,6 +402,13 @@ public class RestfulClient {
 		Logger.e(TAG, "Header - " + headers.toString());
 		Logger.e(TAG, "Params - " + params.toString());
 		Logger.e(TAG, "URL - " + strUrl);
+		
+		// 2012-11-06 brucewang
+		// send locale, useragent...
+		Locale locale = mCtx.getResources().getConfiguration().locale;
+		String strLocale = locale.toString();
+		String userAgent = System.getProperty( "http.agent" );
+		mHttpClient.getParams().setParameter(CoreProtocolPNames.USER_AGENT, userAgent);
 
 		try {
 			switch (iRequestType) {
@@ -323,6 +417,8 @@ public class RestfulClient {
 					HttpGet requestGet = new HttpGet(strUrl + combinedParams);
 					
 					requestGet.setHeader("Cache-Control", "no-cache");
+					requestGet.setHeader("Locale", strLocale);
+					
 					// add headers
 					for (NameValuePair h : headers) {
 						requestGet.addHeader(h.getName(), h.getValue());
@@ -332,6 +428,7 @@ public class RestfulClient {
 				case HTTP_POST :
 					HttpPost requestPost = new HttpPost(strUrl);
 					requestPost.setHeader("Cache-Control", "no-cache");
+					requestPost.setHeader("Locale", strLocale);
 
 					// add parameters
 					if (!params.isEmpty()) {
@@ -352,6 +449,7 @@ public class RestfulClient {
 					HttpPut requestPut = new HttpPut(strUrl);// +
 																// combinedParams);
 					requestPut.setHeader("Cache-Control", "no-cache");
+					requestPut.setHeader("Locale", strLocale);
 					if (!params.isEmpty()) {
 						HttpEntity entity = new UrlEncodedFormEntity(params,"UTF-8");
 						requestPut.setEntity(entity);
@@ -377,7 +475,9 @@ public class RestfulClient {
 
 				 case HTTP_DEL:
 					HttpDelete requestDel = new HttpDelete(strUrl);
+					requestDel.setHeader("Locale", strLocale);
 					httpResponse = mHttpClient.execute(requestDel);
+					
 					break;
 
 				default :
@@ -460,6 +560,15 @@ public class RestfulClient {
 //			if( mDeviceId!=null && mDeviceId.length()>0 ){
 //				conn.setRequestProperty("device_id", mDeviceId);
 //			}
+			
+			
+			// 2012-11-06 brucewang
+			// send locale, useragent...
+			Locale locale = mCtx.getResources().getConfiguration().locale;
+			String strLocale = locale.toString();
+			conn.setRequestProperty("Locale", strLocale);
+			String userAgent = System.getProperty( "http.agent" );
+			conn.setRequestProperty("User-Agent", userAgent);
 			
 			conn.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
 			conn.setRequestProperty("Accept-Charset", "windows-949,utf-8;q=0.7,*;q=0.3");
