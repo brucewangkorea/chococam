@@ -1,0 +1,173 @@
+#summary 서버 설치및 실행 방법 (Ubuntu 12.10 64 Desktop 기준)
+
+
+cd ~
+mkdir tmp
+cd tmp
+
+= Ruby 설치 = 
+Ruby 버전은 1.9.3 이상이어야 한다.
+{{{
+sudo apt-get -y update
+sudo apt-get -y install build-essential zlib1g-dev libssl-dev libreadline-dev libyaml-dev libcurl4-openssl-dev curl git-core python-software-properties
+sudo apt-get install vim
+
+wget ftp://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p194.tar.gz
+tar -xvzf ruby-1.9.3-p194.tar.gz
+cd ruby-1.9.3-p194/
+./configure
+make
+sudo make install
+echo "gem: --no-ri --no-rdoc" >> ~/.gemrc
+sudo gem install bundler
+
+sudo /usr/local/bin/gem update --system
+sudo /usr/local/bin/gem update
+}}}
+
+
+
+= Rails 설치 =
+{{{
+sudo /usr/local/bin/gem install rails passenger
+}}}
+
+
+= Mysql서버및 mysql gem설치 =
+{{{
+> MySql 설치시 root 비밀번호를 rails서버 config/database.yml 에서 사용한 비밀번호로 변경.
+> 현재 소스코드에서는  'root' 라고 되어 있음.
+sudo apt-get install mysql-server mysql-client
+sudo /etc/init.d/mysql restart
+sudo apt-get install libmysql-ruby
+sudo apt-get install libmysqlclient-dev
+sudo gem install mysql 
+}}}
+
+= imagemagick, rmagick 설치 =
+{{{
+sudo apt-get install imagemagick --fix-missing
+sudo apt-get install graphicsmagick-libmagick-dev-compat
+sudo apt-get install librmagick-ruby
+sudo apt-get install libmagickwand-dev
+sudo gem install rmagick
+}}}
+
+= mongodb 인스톨 =
+{{{
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
+> sudo vim /etc/apt/sources.list
+> 다음 행 추가
+deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen
+> vim 문서 저장후 종료.
+sudo apt-get update
+sudo apt-get install mongodb-10gen
+sudo service mongodb start
+}}}
+
+= 서버소스 설치 및 bundle 설치 =
+{{{
+sudo apt-get install subversion
+cd ~
+mkdir svn
+cd svn
+svn checkout http://chococam.googlecode.com/svn/trunk/ chococam-read-only
+sudo apt-get install libxslt-dev libxml2-dev
+sudo gem install nokogiri
+cd ~/svn/chococam-read-only/trunk/server
+bundle install
+}}}
+
+= delayed_job for mongoid 설치 =
+
+MySql 접속시 사용하는 socket파일의 경로를 다음 파일에서 확인
+{{{
+> vim /etc/mysql/my.cnf 
+}}}
+
+Rails서버 소스코드 디렉토리의 config/database.yml 에서 소켓파일 경로를 수정.
+{{{
+> vim conf/database.yml
+> /var/lib/mysql/mysql.sock 를 /var/run/mysqld/mysqld.sock 로
+}}}
+
+{{{
+rake db:create
+rake db:create RAILS_ENV=production
+script/rails runner 'Delayed::Backend::Mongoid::Job.create_indexes'
+}}}
+
+
+= ffmpeg 설치 =
+{{{
+sudo apt-get remove ffmpeg x264 libav-tools libvpx-dev libx264-dev
+sudo apt-get update
+sudo apt-get -y install autoconf build-essential checkinstall git libfaac-dev libgpac-dev \
+  libjack-jackd2-dev libmp3lame-dev libopencore-amrnb-dev libopencore-amrwb-dev \
+  librtmp-dev libsdl1.2-dev libtheora-dev libtool libva-dev libvdpau-dev libvorbis-dev \
+  libx11-dev libxext-dev libxfixes-dev pkg-config texi2html yasm zlib1g-dev
+}}}
+x264 설치
+{{{
+cd
+git clone --depth 1 git://git.videolan.org/x264
+cd x264
+./configure --enable-static
+make
+sudo checkinstall --pkgname=x264 --pkgversion="3:$(./version.sh | \
+  awk -F'[" ]' '/POINT/{print $4"+git"$5}')" --backup=no --deldoc=yes \
+  --fstrans=no --default
+}}}
+fdk-aac 설치
+{{{
+cd
+git clone --depth 1 git://github.com/mstorsjo/fdk-aac.git
+cd fdk-aac
+autoreconf -fiv
+./configure --disable-shared
+make
+sudo checkinstall --pkgname=fdk-aac --pkgversion="$(date +%Y%m%d%H%M)-git" --backup=no \
+  --deldoc=yes --fstrans=no --default
+
+}}}
+libvpx 설치
+{{{
+cd
+git clone --depth 1 http://git.chromium.org/webm/libvpx.git
+cd libvpx
+./configure
+make
+sudo checkinstall --pkgname=libvpx --pkgversion="1:$(date +%Y%m%d%H%M)-git" --backup=no \
+  --deldoc=yes --fstrans=no --default
+}}}
+
+FFmpeg 설치
+Ubuntu Server 의 경우는 --enable-x11grab 파라미터를 빼셔야 합니다.
+{{{
+cd
+git clone --depth 1 git://source.ffmpeg.org/ffmpeg
+cd ffmpeg
+./configure --enable-gpl --enable-libfaac --enable-libfdk-aac --enable-libmp3lame \
+  --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-librtmp --enable-libtheora \
+  --enable-libvorbis --enable-libvpx --enable-x11grab --enable-libx264 --enable-nonfree \
+  --enable-version3
+make
+sudo checkinstall --pkgname=ffmpeg --pkgversion="7:$(date +%Y%m%d%H%M)-git" --backup=no \
+  --deldoc=yes --fstrans=no --default
+hash x264 ffmpeg ffplay ffprobe
+}}}
+
+qt-faststart
+{{{
+cd ~/ffmpeg
+make tools/qt-faststart
+sudo checkinstall --pkgname=qt-faststart --pkgversion="$(date +%Y%m%d%H%M)-git" --backup=no \
+  --deldoc=yes --fstrans=no --default install -Dm755 tools/qt-faststart \
+  /usr/local/bin/qt-faststart
+
+}}}
+이후의 과정은 프로젝트 가이드의 문서 내용과 동일합니다.
+
+
+
+
