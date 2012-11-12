@@ -97,7 +97,7 @@ public class Constants {
     
 	public final static String SOCIAL_SERVER_URL = "http://"+SOCIAL_SERVER_DOMAINORIP+":3000";
     
-    
+	public final static long MAXIMUM_UPLAODFILE_SIZE = (10*1024*1024);//
     
 	
 	public static final String SERVER_IMAGE_PATH = SOCIAL_SERVER_URL;
