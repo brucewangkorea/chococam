@@ -107,7 +107,7 @@ public class FriendsActivity extends FragmentActivity implements ViewPagerIndica
         final Fragment frFreindsList = Fragment.instantiate(this, FriendsList.class.getName());
 		
         Intent i = getIntent();
-		long target_user_id = i.getLongExtra(Constants.TARGET_USER_ID, UserService.getMyUserId(FriendsActivity.this));
+		long target_user_id = i.getLongExtra(Constants.TARGET_USER_ID, UserService.getDefaultUserId(FriendsActivity.this));
 		Bundle args = new Bundle();
         args.putLong(Constants.TARGET_USER_ID, target_user_id);
         

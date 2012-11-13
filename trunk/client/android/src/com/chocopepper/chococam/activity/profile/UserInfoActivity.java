@@ -18,18 +18,21 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chocopepper.chococam.R;
+import com.chocopepper.chococam.activity.account.FacebookOrEmailActivity;
 import com.chocopepper.chococam.dao.UserService;
 import com.chocopepper.chococam.model.MyUserInfo;
 import com.chocopepper.chococam.network.SocialServerApis;
@@ -38,6 +41,9 @@ import com.chocopepper.chococam.util.ImageLoader;
 import com.chocopepper.chococam.util.Logger;
 import com.chocopepper.chococam.util.MyProgressDialog;
 import com.chocopepper.chococam.util.Utils;
+import com.chocopepper.lib.facebook.ChocoFacebook;
+import com.chocopepper.lib.facebook.SessionEvents.AuthListener;
+import com.chocopepper.lib.facebook.SessionEvents.LogoutListener;
 
 public class UserInfoActivity extends Activity implements OnClickListener {
 
@@ -71,7 +77,33 @@ public class UserInfoActivity extends Activity implements OnClickListener {
 	private ImageView imgprofile;
 	private LinearLayout llName_info;	
 	private TextView txtName_info;	
-
+	private Button mBtnLogout;
+	
+	private ChocoFacebook mChocoFacebook;
+	private Handler mFacebookHandler;
+	private FacebookSessionListener mFacebookSessionListener = new FacebookSessionListener();
+	/*
+	 * 
+	 * Login/Logout session 관련 이벤트를 종합 관리하는 listener.
+	 */
+	private class FacebookSessionListener
+			implements
+				AuthListener,
+				LogoutListener {
+		@Override
+		public void onAuthSucceed() {
+		}
+		@Override
+		public void onAuthFail(String error) {
+		}
+		@Override
+		public void onLogoutBegin() {
+		}
+		@Override
+		public void onLogoutFinish() {
+			LogoutAndStartAgain();
+		}
+	}// end of 'FacebookSessionListener'
 
 	GetDataTask getDataTask;
 
@@ -102,7 +134,35 @@ public class UserInfoActivity extends Activity implements OnClickListener {
 
 		llName_info.setOnClickListener(this);
 		txtName_info.setOnClickListener(this);
-		imgprofile.setOnClickListener(this);		
+		imgprofile.setOnClickListener(this);
+		
+		// 2012-11-13 brucewang
+		// 로그아웃 기능 구현.
+		mChocoFacebook = ChocoFacebook.getInstance(UserInfoActivity.this);
+		mChocoFacebook.addLogoutListener(mFacebookSessionListener);
+		mBtnLogout = (Button)findViewById(R.id.btnLogout);
+		mBtnLogout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if( mChocoFacebook.loginRequired()==false ){
+					mChocoFacebook.logout(UserInfoActivity.this);
+				}
+				else{
+					LogoutAndStartAgain();
+				}
+			}
+		});
+	}
+	
+	private void LogoutAndStartAgain(){
+		mChocoFacebook.removeAuthListener(mFacebookSessionListener);
+		UserService.recordMyUserId2(UserInfoActivity.this, "");
+		Intent i = new Intent(UserInfoActivity.this,
+				FacebookOrEmailActivity.class);
+		i.putExtra("SIGNUP", true);
+		startActivity(i);
+		UserInfoActivity.this.finish();
 	}
 
 	@Override
@@ -229,6 +289,14 @@ public class UserInfoActivity extends Activity implements OnClickListener {
 						imgprofile);
 			}
 			txtName_info.setText(mMyUserInfo.name);
+			
+			
+			// 2012-11-13 brucewang
+			// 로그아웃 기능 구현.
+			String strMsg = String.format(UserInfoActivity.this
+					.getString(R.string.format_logout_facebook),
+					mMyUserInfo.name);
+			mBtnLogout.setText(strMsg);
 		} else {
 			Logger.e(TAG, "mMyUserInfo is Null!!");
 		}

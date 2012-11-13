@@ -192,7 +192,7 @@ public class MainActivity extends TabActivity implements OnTabChangeListener {
 		// 2012-05-23 brucewang
 		// '누구의' 친구목록을 보여줄 것인가 그 대상 id를 지정해 줍니다.
 		manageIntent.putExtra(Constants.TARGET_USER_ID,
-				UserService.getMyUserId(MainActivity.this));
+				UserService.getDefaultUserId(MainActivity.this));
 		manages.setOnClickListener(new TitleClickListener(manageIntent));
 
 		// //////////////////////////// Tab Content View Setup
