@@ -344,7 +344,7 @@ public class FriendsFeedActivity extends GFragment implements OnItemClickListene
 			{
 				// mFeeds.get(0).post.user_id를  mFeeds.get(0)._id로 변경
 				// post가 null로 들어오는 경우가 있기 때문에 feed의 id로 변경 한다.
-				if(mFeeds.get(0).post!=null && mFeeds.get(0)._id.equals(String.format("%d", UserService.getMyUserId(gfContext))))//2번의 경우
+				if(mFeeds.get(0).post!=null && mFeeds.get(0)._id.equals(String.format("%d", UserService.getDefaultUserId(gfContext))))//2번의 경우
 				{
 					llmsg.setVisibility(View.VISIBLE);
 					setFriendsList();

@@ -19,38 +19,47 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical" >
 
                 <LinearLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" 
-                    android:layout_marginTop="30dip">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dip" >
 
                     <com.chocopepper.chococam.util.ImageViewRounded
                         android:id="@+id/imgprofile"
                         android:layout_width="60dip"
                         android:layout_height="60dip"
-                        android:src="@drawable/default_user" android:layout_marginLeft="10dip" android:layout_gravity="center" android:layout_marginRight="3dip">
-                    </com.chocopepper.chococam.util.ImageViewRounded>
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dip"
+                        android:layout_marginRight="3dip"
+                        android:src="@drawable/default_user" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" android:layout_marginBottom="15dip">
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dip" >
 
                         <TextView
                             android:id="@+id/txtName_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/user_Name" android:textColor="#939393" android:layout_marginBottom="2dip" android:layout_marginLeft="5dip" android:layout_marginRight="5dip" android:layout_marginTop="5dip"/>
+                            android:layout_marginBottom="2dip"
+                            android:layout_marginLeft="5dip"
+                            android:layout_marginRight="5dip"
+                            android:layout_marginTop="5dip"
+                            android:text="@string/user_Name"
+                            android:textColor="#939393" />
 
                         <LinearLayout
                             android:id="@+id/llName_info"
                             android:layout_width="match_parent"
                             android:layout_height="40dip"
+                            android:layout_below="@+id/txtName_title"
                             android:layout_marginRight="10dip"
                             android:background="@drawable/myinfo_activity_box"
                             android:gravity="center"
-                            android:orientation="vertical" android:layout_below="@+id/txtName_title">
+                            android:orientation="vertical" >
 
                             <TextView
                                 android:id="@+id/txtName_info"
@@ -58,15 +67,27 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="7dip"
                                 android:layout_marginRight="5dip"
+                                android:ellipsize="end"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:ellipsize="end"
-                                android:textColor="#6a6261" android:textStyle="bold"/>
+                                android:textColor="#6a6261"
+                                android:textStyle="bold" />
                         </LinearLayout>
-
                     </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>
+
+            <Button
+                android:id="@+id/btnLogout"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_marginBottom="0dp"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_weight="0"
+                android:background="@drawable/reply_send_button"
+                android:textColor="#6a6261" />
+
         </LinearLayout>
     </ScrollView>
 

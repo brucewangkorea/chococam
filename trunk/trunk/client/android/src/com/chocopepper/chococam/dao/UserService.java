@@ -19,7 +19,10 @@ public class UserService {
 	}
 	public static String getMyUserId2(Context context) {		
 		final SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        String userId = prefs.getString(Constants.PREFS_AUTH_TOKEN, null);        
+        String userId = prefs.getString(Constants.PREFS_AUTH_TOKEN, null);
+        if(userId!=null && userId.length()==0){
+        	userId = null;
+        }
 		return userId;
 	}
 	
@@ -49,10 +52,8 @@ public class UserService {
 	 * @param context
 	 * @return userid
 	 */
-	public static long getMyUserId(Context context) {		
-		final SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        long userId = prefs.getLong(Constants.PREFS_USER_ID, 0);        
-		return userId;
+	public static long getDefaultUserId(Context context) {		
+		return 0;
 	}
 
 }
