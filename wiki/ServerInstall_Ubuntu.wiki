@@ -87,7 +87,7 @@ MySql 접속시 사용하는 socket파일의 경로를 다음 파일에서 확�
 
 Rails서버 소스코드 디렉토리의 config/database.yml 에서 소켓파일 경로를 수정.
 {{{
-> vim conf/database.yml
+> vim config/database.yml
 > /var/lib/mysql/mysql.sock 를 /var/run/mysqld/mysqld.sock 로
 }}}
 
@@ -167,5 +167,3 @@ sudo checkinstall --pkgname=qt-faststart --pkgversion="$(date +%Y%m%d%H%M)-git" 
 
 }}}
 이후의 과정은 프로젝트 가이드의 문서 내용과 동일합니다.
-
-
