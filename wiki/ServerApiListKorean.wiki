@@ -1330,6 +1330,13 @@ post[recipients][]=sdf2490rf243rkrf2eq14
 ==Parameters==
   * auth_token (필수): ‘tokens.json’ API를 통해 얻어 온 토큰 정보
   * {{{ fb_ids[] }}}: 현자 사용자의 Facebook 친구들의  Facebook id
+    조회하고자 하는 사용자들의 Facebook id를 다음과 같이 연속적으로 파라미터를 추가해 주면 됨.
+      {{{
+fb_ids[]=fsoi13413e19341klfadf
+fb_ids[]=32edfjk24r213rklqef81
+fb_ids[]=sdf2490rf243rkrf2eq14
+      }}}
+
 ==Result==
   # HTTP 200  : OK
     {{{
