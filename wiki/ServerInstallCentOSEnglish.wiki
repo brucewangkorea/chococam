@@ -155,7 +155,7 @@ vim config/environments/development.rb
 = Set crontab to run your server whenever the server reboots =
 {{{
 > crontab -e
-@reboot cd {서버 프로젝트의 루트디렉토리}; rm -f log/*; start.sh
+@reboot cd {server project root directory}; rm -f log/*; start.sh
 }}}
 = extra settings =
 Double check your 'config/database.yml' file and other 'config/environments/*.rb' files.
