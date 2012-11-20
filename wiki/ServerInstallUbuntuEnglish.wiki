@@ -1,5 +1,4 @@
-#InstallUbuntu
-Install guide for Ubuntu (12.10 64 Desktop)
+#summary Install guide for Ubuntu (12.10 64 Desktop)
 
 
 {{{
