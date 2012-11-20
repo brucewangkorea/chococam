@@ -1,6 +1,4 @@
-#InstallUbuntu
-
-서버 설치및 실행 방법 (Ubuntu 12.10 64 Desktop 기준)
+#summary 서버 설치및 실행 방법 (Ubuntu 12.10 64 Desktop 기준)
 
 {{{
 cd ~
