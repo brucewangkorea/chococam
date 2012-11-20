@@ -1151,7 +1151,7 @@ post[recipients][]=sdf2490rf243rkrf2eq14
   HTTP multipart 로 form data를 전송.
   * auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
   * {{{ user[name] }}}: 사용자의 이름.
-  * {{{ user[avatar] }}}: 이 부분에  HTTP Multipart로 실제 동영상 데이터를 업로드해야 한다.
+  * {{{ user[avatar] }}}: 이 부분에  HTTP Multipart로 이미지 데이터를 업로드해야 한다.
 ==Result==
   # HTTP 200  : OK
     {{{
