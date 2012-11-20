@@ -1,17 +1,21 @@
 #summary 서버 설치및 실행 방법 (Ubuntu 12.10 64 Desktop 기준)
 
-
+{{{
 cd ~
 mkdir tmp
 cd tmp
+}}}
 
 = Ruby 설치 = 
 Ruby 버전은 1.9.3 이상이어야 한다.
+
 {{{
+# 필요 라이브러리 및 명령어를 설치
 sudo apt-get -y update
 sudo apt-get -y install build-essential zlib1g-dev libssl-dev libreadline-dev libyaml-dev libcurl4-openssl-dev curl git-core python-software-properties
 sudo apt-get install vim
 
+# Ruby 1.9.3 소스를 다운로드 하여 컴파일/설치.
 wget ftp://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p194.tar.gz
 tar -xvzf ruby-1.9.3-p194.tar.gz
 cd ruby-1.9.3-p194/
@@ -21,6 +25,7 @@ sudo make install
 echo "gem: --no-ri --no-rdoc" >> ~/.gemrc
 sudo gem install bundler
 
+# Gem (Ruby에서 사용하는 일종의 라이브러리) 을 관리하는 명령어인 gem의 환경을 최신 상태로 유지
 sudo /usr/local/bin/gem update --system
 sudo /usr/local/bin/gem update
 }}}
@@ -45,6 +50,7 @@ sudo gem install mysql
 }}}
 
 = imagemagick, rmagick 설치 =
+imagemagick은 이미지 파일들을 확대/측소/그리고 다양한 효과를 주어 변환할 수 있도록 하는 외부 프로그램. rmagick은 RoR에서 imagemagick 을 사용할 수 있도록 도와주는 gem 임.
 {{{
 sudo apt-get install imagemagick --fix-missing
 sudo apt-get install graphicsmagick-libmagick-dev-compat
@@ -79,6 +85,7 @@ bundle install
 }}}
 
 = delayed_job for mongoid 설치 =
+delayed_job은 RoR에서 백그라운드로 작업을 진행할 수 있도록 도와주는 gem.
 
 MySql 접속시 사용하는 socket파일의 경로를 다음 파일에서 확인
 {{{
@@ -87,10 +94,13 @@ MySql 접속시 사용하는 socket파일의 경로를 다음 파일에서 확�
 
 Rails서버 소스코드 디렉토리의 config/database.yml 에서 소켓파일 경로를 수정.
 {{{
+# 다음과 같이 RoR의 Database 설정파일을 열어서
 > vim config/database.yml
-> /var/lib/mysql/mysql.sock 를 /var/run/mysqld/mysqld.sock 로
+# 다음과 같이 앞서 my.cnf 파일에서 설정된 소켓 파일의 경로대로
+# /var/lib/mysql/mysql.sock 를 /var/run/mysqld/mysqld.sock 로 변경.
 }}}
 
+다음의 명령을 수행하여 RoR이 사용하는 Database 구조를 미리 만들어 둠.
 {{{
 rake db:create
 rake db:create RAILS_ENV=production
@@ -99,6 +109,8 @@ script/rails runner 'Delayed::Backend::Mongoid::Job.create_indexes'
 
 
 = ffmpeg 설치 =
+ffmpeg은 동영상을 변환하는 유명한 외부 프로그램.
+아래의 모든 과정은 소스를 다운로드하여 현재 OS환경에 맞게 컴파일하여 설치하는 과정으로 시간이 상당히 소요됨.
 {{{
 sudo apt-get remove ffmpeg x264 libav-tools libvpx-dev libx264-dev
 sudo apt-get update
@@ -107,7 +119,7 @@ sudo apt-get -y install autoconf build-essential checkinstall git libfaac-dev li
   librtmp-dev libsdl1.2-dev libtheora-dev libtool libva-dev libvdpau-dev libvorbis-dev \
   libx11-dev libxext-dev libxfixes-dev pkg-config texi2html yasm zlib1g-dev
 }}}
-== x264 설치 ==
+== ffmpeg용 x264 코덱 설치 ==
 {{{
 cd
 git clone --depth 1 git://git.videolan.org/x264
@@ -118,7 +130,7 @@ sudo checkinstall --pkgname=x264 --pkgversion="3:$(./version.sh | \
   awk -F'[" ]' '/POINT/{print $4"+git"$5}')" --backup=no --deldoc=yes \
   --fstrans=no --default
 }}}
-== fdk-aac 설치 ==
+== fdk-aac 코덱 설치 ==
 {{{
 cd
 git clone --depth 1 git://github.com/mstorsjo/fdk-aac.git
@@ -130,7 +142,7 @@ sudo checkinstall --pkgname=fdk-aac --pkgversion="$(date +%Y%m%d%H%M)-git" --bac
   --deldoc=yes --fstrans=no --default
 
 }}}
-== libvpx 설치 ==
+== libvpx 코덱 설치 ==
 {{{
 cd
 git clone --depth 1 http://git.chromium.org/webm/libvpx.git
