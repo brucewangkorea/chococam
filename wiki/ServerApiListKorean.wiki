@@ -1,4 +1,4 @@
-#APIList
+#ApiList
 
 
 
@@ -513,7 +513,7 @@ Result
       * “friends” : 친구들에게만 공개
       * “onlyme”  : 나에게만 공개
       * “restricted” : 지정된 사용자들에게만 공개. ‘recipients’ 파라미터에 이 포스트를 볼 수 있는  사용자들의 id를 지정.
-    * post[recipients] : ‘scope’ 파라미터의 값이 restricted인 경우에만 사용.
+    * {{{ post[recipients] }}} : ‘scope’ 파라미터의 값이 restricted인 경우에만 사용.
       이 포스트를 볼 수 있는 사용자들의 id를 다음과 같이 연속적으로 파라미터를 추가해 주면 됨.
       {{{
 post[recipients][]=fsoi13413e19341klfadf
