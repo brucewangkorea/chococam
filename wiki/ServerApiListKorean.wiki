@@ -709,7 +709,7 @@ post[recipients][]=sdf2490rf243rkrf2eq14
 ==HTTP cmd==
 	GET
 ==목적==
-	현재 사용자가 follow 하고 있는 사용자들의 Post 목록을 반환한다.
+	현재 시스템에서 인기를 끌고 있는 (재생횟수가 많은) 동영상 포스트들의 목록을 수신한다.
 ==Parameters==
   * auth_token (필수): ‘tokens.json’ API를 통해 얻어 온 토큰 정보
   * page :
