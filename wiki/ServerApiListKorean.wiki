@@ -393,11 +393,10 @@ Result
 ==HTTP cmd==
 	POST
 ==목적==
-	다른 사용자가 보낸 follow 요청을 거절 함. 상대방은 자신이 보낸 follow 요청이 아직도 수락 되지 않은 것처럼 보이게 됨. 현재 사용자에겐 거절한 사용자의 요청은 더이상 ‘요청 목록’ 에 보이지 않게 됨.
-  blocked 된 사용자는 block한 사용자의 피드는 물론 post 전체를 전혀 볼 수 없게 되지만, rejected 된 사용자는 피드만 못 볼 뿐 post는 직접 찾아가서 볼 수 있음.  그리고 마치 following 신청은 아직도 유효한 듯 보이게 됨.
+	다른 사용자가 보낸 follow 요청을 승인
 ==Parameters==
-  # auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
-    * to : 현재 사용자에게 follow 요청 보낸 대상 사용자의 id.
+  * auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+  * to : 현재 사용자에게 follow 요청 보낸 대상 사용자의 id.
 ==Result==
   # HTTP 200  : OK
     {{{ {"data":"ok"} }}}
@@ -424,8 +423,8 @@ Result
 	다른 사용자가 보낸 follow 요청을 거절 함. 상대방은 자신이 보낸 follow 요청이 아직도 수락 되지 않은 것처럼 보이게 됨. 현재 사용자에겐 거절한 사용자의 요청은 더이상 ‘요청 목록’ 에 보이지 않게 됨.
   blocked 된 사용자는 block한 사용자의 피드는 물론 post 전체를 전혀 볼 수 없게 되지만, rejected 된 사용자는 피드만 못 볼 뿐 post는 직접 찾아가서 볼 수 있음.  그리고 마치 following 신청은 아직도 유효한 듯 보이게 됨.
 ==Parameters==
-  # auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
-    * to : 현재 사용자에게 follow 요청 보낸 대상 사용자의 id.
+  * auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+  * to : 현재 사용자에게 follow 요청 보낸 대상 사용자의 id.
 ==Result==
   # HTTP 200  : OK
     {{{ {"data":"ok"} }}}
@@ -454,8 +453,8 @@ Result
 	특정 사용자를 block.
   blocked 된 사용자는 block한 사용자의 피드는 물론 post 전체를 전혀 볼 수 없게 되지만, rejected 된 사용자는 피드만 못 볼 뿐 post는 직접 찾아가서 볼 수 있음.  그리고 마치 following 신청은 아직도 유효한 듯 보이게 됨.
 ==Parameters==
-  # auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
-    * to : block 할 사용자의 id
+  * auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+  * to : block 할 사용자의 id
 ==Result==
   # HTTP 200  : OK
     {{{ {"data":"ok"} }}}
@@ -481,8 +480,8 @@ Result
 ==목적==
 	특정 사용자에 대한 접근 차단을 해제.
 ==Parameters==
-  # auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
-    * to : block 을 취소할 사용자의 id
+  * auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+  * to : block 을 취소할 사용자의 id
 ==Result==
   # HTTP 200  : OK
     {{{ {"data":"ok"} }}}
