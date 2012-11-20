@@ -651,7 +651,6 @@ post[recipients][]=sdf2490rf243rkrf2eq14
 	GET
 ==목적==
 	현재 사용자가 follow 하고 있는 사용자들의 Post 목록을 반환한다.
-아직 결과 JSON 포멧 (POST 정보)이 확정되지 않음.
 ==Parameters==
   * auth_token (필수): ‘tokens.json’ API를 통해 얻어 온 토큰 정보
   * page :
@@ -767,7 +766,6 @@ post[recipients][]=sdf2490rf243rkrf2eq14
 	GET
 ==목적==
 	모든 포스트의 목록을 반환한다.
-아직 결과 JSON 포멧 (POST 정보)이 확정되지 않음.
 ==Parameters==
   * auth_token (필수): ‘tokens.json’ API를 통해 얻어 온 토큰 정보
   * page :
