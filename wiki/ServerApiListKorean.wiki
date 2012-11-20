@@ -1,0 +1,1338 @@
+#ChocoCamAPIListKorean
+
+
+
+
+=1. Preface=
+  # 기본적으로 서버는 Restful 방식으로 작동한다. 즉 정보의 조회는 HTTP GET으로, 새로운 정보의 생성은 HTTP POST로, 업데이트는 HTTP PUT으로, 삭제는 HTTP DELETE 로 WEB API를 호출하게 되어 있다.
+  # 주로는 HTTP GET/POST를 사용하여 restful하게 구성되어 있지만, 일부 편의를 위해 POST를 주로 사용하거나, 단순히  GET을 사용하여 정보를 삭제하는 예외적인 경우도 있다.
+  # 서버의 응답결과가 200이면 성공이고, 기타 4xx/5xxx등의 http error code 는 각각 client/server측의 오류임을 의미함.
+  # 서버에서 예상치 못한 오류가 발생한 경우가 아니라면, http  응답 데이터는 Json 형태로 “data” 라는 이름의 필드에 오류 원인에 대한 설명이 들어가게 됨. 이 오류 원인은 단순 스트링이거나, Hash 일 경우등 다양함.
+
+
+=2. 사용자 등록=
+
+
+==API URL==
+  
+/api/v1/users.json ||
+==HTTP cmd==
+  POST
+==목적==
+  
+새로운 사용자 등록
+==Parameters==
+  # email 인증시
+    * email : 새 사용자의 email 주소
+    * password : 새 사용자의 비밀번호
+  # facebook 인증시
+    * facebook_id : 새 사용자의 Facebook ID
+    * name : 새 사용자의 이름.
+    * image_url :프로파일 이미지 URL
+Result
+  * HTTP 200  : OK
+    * JSON 형식이며, “data” 필드에 새 사용자의 정보가 반환됨.
+    * {{{ {"data":{"email":"a5@test.com","fb_user_id":null,"name":null}} }}}
+  * HTTP 4XX : 클라이언트 에러
+  * HTTP 5XX : 서버 에러
+    * JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    * {{{ {"data":{"email":["has already been taken"]}} }}}
+
+
+
+
+
+
+
+
+
+
+=3. Token 얻기 (로그인)=
+
+
+==API URL==
+  /api/v1/tokens.json
+==HTTP cmd==
+	POST
+==목적==
+	token이란 서버의 Web API 사용시 현재 사용자의 신원을 밝히기 위한 키값이며, 거의 모든 WebAPI 호출시 파라미터로 전달해야 한다. 현재 사용자의 이 token 값을 서버로부터 부여 받기 위해 사용한다.
+  이 API를 호출하면 웹서버는 해당 클라이언트를 위한 세션을 생성하게 되므로, 결국 login과 같은 역할을 하게 된다.
+==Parameters==
+  # email 인증시
+    * email : 사용자의 email 주소
+    * password :사용자의 비밀번호
+  # facebook 인증시
+    * facebook_id :사용자의 Facebook ID
+==Result==
+  # HTTP 200  : OK
+      다음과 같은  JSON 형식으로, 향후 서버와의 통신에서 계속 사용할 Accesstoken 값을 반환해 줌.
+      {"token":"QRbjzCfs1GWvWSgCa4zs"}
+      현재로서는 로그아웃 해도 계속 동일한 토큰 값을 사용 할 수 있도록 해 놓았으므로, 클라이언트 프로그램 내부에 저장하여 사용해도 됨.
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+      JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+      {{{ {"data":"user not found"} }}}
+
+
+
+
+
+
+
+
+
+
+
+
+=4. 로그아웃=
+
+
+==API URL==
+	/logout
+==HTTP cmd==
+	GET
+==목적==
+	서버로부터 접속을 해제한다.
+  예를 들어, 동일한 클라이언트에서 다른 사용자로서 로그인 하려면, 기존의 세션을 종료해 주어야만 하는데, 이때 사용할 수 있다.
+==Parameters==
+	필요 없음.
+==Result==
+  # HTTP 302  : OK (기본 로그인 웹 화면 URL로 redirect 됨.)
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"user not found"} }}}
+	
+	
+	
+	
+	
+	
+	
+	
+
+	
+	
+=5. 현재 사용자가 following 하는 사용자들의 목록=
+
+
+==API URL==
+	/api/v1/users/following.json
+==HTTP cmd==
+	POST
+==목적==
+	현재 사용자가 follow 하는 사용자들의 목록을 얻는다.
+==Parameters==
+  # auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+  # only_accepted (optional)
+    * true : follow를 수락한 사용자들의 목록만 반환함.
+    * false : follow 수락과 상관없이 모든 사용자들의 목록을 반환.
+==Result==
+  # HTTP 200  : OK
+    JSON 형식이며, “data” 필드에 현재 사용자가 follow 한 사용자들의 id 정보와 accept 여부 정보가 반환 된다.
+    {{{
+{
+  "data": [
+    {
+      "accepted": true,
+      "user": {
+        "_id": "506e64046a87457505000002",
+        "created_at": "2012-10-05T04:37:24Z",
+        "email": "a2@test.com",
+        "fb_user_id": "1726051469",
+        "name": "Bruce Wang",
+        "remote_profile_image": "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-snc6/273525_1726051469_471046448_q.jpg",
+        "updated_at": "2012-10-09T09:31:09Z",
+        "avatar_url": {
+          "thumbnail": "/uploads/users/506e/6404/6a87/4575/0500/0002/thumbnail/imgprofile.jpg?1349775069",
+          "original": "/uploads/users/506e/6404/6a87/4575/0500/0002/original/imgprofile.jpg?1349775069"
+        }
+      }
+    }
+  ]
+}
+}}}
+    만일 ‘only_accepted’ 파라미터에 true를 지정해 주었다면 위의 결과에 accept 여부가 false인 사용자들은 반환 되지 않을 것이다.
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"user not found"} }}}}
+
+
+
+
+
+
+
+
+
+
+
+=6. 현재 사용자를 follow 하는 사람들 (follower)의 목록=
+
+
+==API URL==
+	/api/v1/users/followers.json
+==HTTP cmd==
+	POST
+==목적==
+	현재 사용자를  follow 하고 있는 사람들의 목록을 반환한다.
+==Parameters==
+  # auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+  # only_accepted (optional)
+    * true : follow를 수락한 사용자들의 목록만 반환함.
+    * false : follow 수락과 상관없이 모든 사용자들의 목록을 반환.
+==Result==
+  # HTTP 200  : OK
+    JSON 형식이며, “data” 필드에 현재 사용자를 follow 하는  사용자들의 id 정보와 accept 여부 정보가 반환 된다.
+    {{{
+{
+  "data": [
+    {
+      "accepted": true,
+      "user": {
+        "_id": "506e64046a87457505000002",
+        "created_at": "2012-10-05T04:37:24Z",
+        "email": "a2@test.com",
+        "fb_user_id": "1726051469",
+        "name": "Bruce Wang",
+        "remote_profile_image": "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-snc6/273525_1726051469_471046448_q.jpg",
+        "updated_at": "2012-10-09T09:31:09Z",
+        "avatar_url": {
+          "thumbnail": "/uploads/users/506e/6404/6a87/4575/0500/0002/thumbnail/imgprofile.jpg?1349775069",
+          "original": "/uploads/users/506e/6404/6a87/4575/0500/0002/original/imgprofile.jpg?1349775069"
+        }
+      }
+    }
+  ]
+}
+    }}}
+    만일 ‘only_accepted’ 파라미터에 true를 지정해 주었다면 위의 결과에 accept 여부가 false인 사용자들은 반환 되지 않을 것이다.
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"user not found"} }}}
+
+
+
+
+
+
+
+
+
+
+
+=7.현재 사용자가 following 하는 사용자들의 수=
+
+
+==API URL==
+	/api/v1/users/following_count.json
+==HTTP cmd==
+	POST
+==목적==
+	현재 사용자가 following 하는 사람들의 총 수만 확인한다.
+==Parameters==
+  # auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+  # only_accepted (optional)
+    * true : follow를 수락한 사용자들의 수 만 반환함.
+    * false : follow 수락과 상관없이 모든 사용자들의 수 를 반환.
+==Result==
+  # HTTP 200  : OK
+    JSON 형식이며, “data” 필드에 현재 사용자가 follow 하는 사용자들의 수가 반환 된다.
+    {{{ {"data":2} }}}
+    만일 ‘only_accepted’ 파라미터에 true를 지정해 주었다면 위의 결과에 accept 여부가 false인 사용자들의 수는 포함되지 않을 것이다.
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"user not found"} }}}
+
+
+
+
+
+
+
+
+
+=8.현재 사용자를 follow 하는 사람들 (follower)의 수=
+
+
+==API URL==
+	/api/v1/users/followers_count.json
+==HTTP cmd==
+	POST
+==목적==
+	현재 사용자를  follow 하고 있는 사람들의 수 를 반환한다.
+==Parameters==
+  # auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+  # only_accepted (optional)
+    * true : follow를 수락한 사용자들의 수 만 반환함.
+    * false : follow 수락과 상관없이 모든 사용자들의 수 를을 반환.
+==Result==
+  # HTTP 200  : OK
+    JSON 형식이며, “data” 필드에 현재 사용자를 follow 하는 사용자들의 수가 반환 된다.
+    {{{ {"data":2} }}}
+    만일 ‘only_accepted’ 파라미터에 true를 지정해 주었다면 위의 결과에 accept 여부가 false인 사용자들의 수는 포함되지 않을 것이다.
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"user not found"} }}}
+
+
+
+
+
+
+
+=9. 특정 사용자에게 follow 요청.=
+
+
+==API URL==
+	/api/v1/users/follow.json
+==HTTP cmd==
+	POST
+==목적==
+	현재 사용자가 특정 id의 사용자에게 follow 요청을 보냄.
+==Parameters==
+  # auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+    * to :
+    * follow하고자 하는 대상 사용자의 id.
+==Result==
+  # HTTP 200  : OK
+    {"data":"ok"}
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"user not found"} }}}
+
+
+
+
+
+
+
+
+
+=10. 현재 사용자에게 들어온  follow 요청 목록=
+
+
+==API URL==
+	/api/v1/users/follow_requests.json
+==HTTP cmd==
+	POST
+==목적==
+	현재 사용자에게 follow 요청을 보낸 사용자들의 id 목록을 반환한다.
+==Parameters==
+  # auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+==Result==
+  # HTTP 200  : OK
+    JSON 형식이며, “data” 필드에 현재 사용자에게 follow 요청을 보낸  사용자들의 정보가 반환 된다.
+    {{{{
+{
+  "data": [
+    {
+        "_id": "506e64046a87457505000002",
+        "created_at": "2012-10-05T04:37:24Z",
+        "email": "a2@test.com",
+        "fb_user_id": "1726051469",
+        "name": "Bruce Wang",
+        "remote_profile_image": "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-snc6/273525_1726051469_471046448_q.jpg",
+        "updated_at": "2012-10-09T09:31:09Z",
+        "avatar_url": {
+          "thumbnail": "/uploads/users/506e/6404/6a87/4575/0500/0002/thumbnail/imgprofile.jpg?1349775069",
+          "original": "/uploads/users/506e/6404/6a87/4575/0500/0002/original/imgprofile.jpg?1349775069"
+      }
+    }
+  ]
+}
+    }}}	
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"user not found"} }}}
+
+
+
+
+
+
+
+
+
+=11. 특정 사용자를 follow 하던 것을 취소.=
+
+
+==API URL==
+	/api/v1/users/unfollow.json
+==HTTP cmd==
+	POST
+==목적==
+	현재 사용자가 follow 하고 있던 특정 사용자를 더이상 follow 하지 않음.
+==Parameters==
+  # auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+    * to : follow를 취소 하고자 하는 대상 사용자의 id.
+==Result==
+  # HTTP 200  : OK
+    {{{ {"data":"ok"} }}}
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"user not found"} }}}
+
+
+
+
+
+
+
+=12. follow 요청 승인=
+
+
+==API URL==
+	/api/v1/users/accept_follow.json
+==HTTP cmd==
+	POST
+==목적==
+	다른 사용자가 보낸 follow 요청을 거절 함. 상대방은 자신이 보낸 follow 요청이 아직도 수락 되지 않은 것처럼 보이게 됨. 현재 사용자에겐 거절한 사용자의 요청은 더이상 ‘요청 목록’ 에 보이지 않게 됨.
+  *blocked 된 사용자는 block한 사용자의 피드는 물론 post 전체를 전혀 볼 수 없게 되지만, rejected 된 사용자는 피드만 못 볼 뿐 post는 직접 찾아가서 볼 수 있음.  그리고 마치 following 신청은 아직도 유효한 듯 보이게 됨.*
+==Parameters==
+  # auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+    * to : 현재 사용자에게 follow 요청 보낸 대상 사용자의 id.
+==Result==
+  # HTTP 200  : OK
+    {{{ {"data":"ok"} }}}
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"user not found"} }}}
+
+
+
+
+
+
+
+
+=13. follow 요청 거절=
+
+
+==API URL==
+	/api/v1/users/reject_follow.json
+==HTTP cmd==
+	POST
+==목적==
+	다른 사용자가 보낸 follow 요청을 거절 함. 상대방은 자신이 보낸 follow 요청이 아직도 수락 되지 않은 것처럼 보이게 됨. 현재 사용자에겐 거절한 사용자의 요청은 더이상 ‘요청 목록’ 에 보이지 않게 됨.
+  *blocked 된 사용자는 block한 사용자의 피드는 물론 post 전체를 전혀 볼 수 없게 되지만, rejected 된 사용자는 피드만 못 볼 뿐 post는 직접 찾아가서 볼 수 있음.  그리고 마치 following 신청은 아직도 유효한 듯 보이게 됨.*
+==Parameters==
+  # auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+    * to : 현재 사용자에게 follow 요청 보낸 대상 사용자의 id.
+==Result==
+  # HTTP 200  : OK
+    {{{ {"data":"ok"} }}}
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"user not found"} }}}
+	
+
+
+
+
+
+
+
+
+
+
+=14. 특정 사용자를 block=
+
+==API URL==
+	/api/v1/users/block_follow.json
+==HTTP cmd==
+	POST
+==목적==
+	특정 사용자를 block.
+  *blocked 된 사용자는 block한 사용자의 피드는 물론 post 전체를 전혀 볼 수 없게 되지만, rejected 된 사용자는 피드만 못 볼 뿐 post는 직접 찾아가서 볼 수 있음.  그리고 마치 following 신청은 아직도 유효한 듯 보이게 됨.*
+==Parameters==
+  # auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+    * to : block 할 사용자의 id
+==Result==
+  # HTTP 200  : OK
+    {{{ {"data":"ok"} }}}
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"user not found"} }}}
+
+
+
+
+
+
+
+
+=15.특정 사용자에 대한 block을 취소.=
+
+
+==API URL==
+	/api/v1/users/unblock_follow.json
+==HTTP cmd==
+	POST
+==목적==
+	특정 사용자에 대한 접근 차단을 해제.
+==Parameters==
+  # auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+    * to : block 을 취소할 사용자의 id
+==Result==
+  # HTTP 200  : OK
+    {{{ {"data":"ok"} }}}
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환 됨.
+    {{{ {"data":"user not found"} }}}
+
+
+
+
+
+
+=16.동영상 Post를 생성.=
+==API URL==
+	/api/v1/posts
+==HTTP cmd==
+	POST
+==목적==
+	동영상 파일을 업로드 하여, 새로운 동영상 post를 생성한다.
+==Parameters==
+  # HTTP multipart 로 form data를 전송.
+    * auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+    * post[description] : 사용자가 입력한 동영상에 대한 설명 글.
+    * post[scope] :
+      * “public” : 모든 사용자에게 공개
+      * “friends” : 친구들에게만 공개
+      * “onlyme”  : 나에게만 공개
+      * “restricted” : 지정된 사용자들에게만 공개. ‘recipients’ 파라미터에 이 포스트를 볼 수 있는  사용자들의 id를 지정.
+    * post[recipients] : ‘scope’ 파라미터의 값이 restricted인 경우에만 사용.
+      이 포스트를 볼 수 있는 사용자들의 id를 다음과 같이 연속적으로 파라미터를 추가해 주면 됨.
+      post[recipients][]=fsoi13413e19341klfadf
+      post[recipients][]=32edfjk24r213rklqef81
+      post[recipients][]=sdf2490rf243rkrf2eq14
+    * post[movie_attributes][name] : 동영상 자체의 이름
+		* 외부 동영상의 링크만 지정하는 경우.
+			* post[movie_attributes][remote_source] : 원본 동영상을 제공하는 서비스의 이름. 
+				예) YouTube
+			* post[movie_attributes][remote_url] :
+				play 가능한 동영상의 주소.
+				예) "http://www.youtube.com/v/2rCP4CRRO7E&feature=youtube_gdata_player"
+			* post[movie_attributes][thumbnails] :
+				동영상 Thumbnail 이미지의 주소
+				Array 형태로서 다음과 같이 지정하면 됨.
+				[“http://www.a.com/a.png”,”...”,...]
+		* 무비 파일을 직접 업로드 하는 경우.
+			* post[movie_attributes][file] : 업로드 할 파일의 이름
+				 이 부분에  HTTP Multipart로 실제 동영상 데이터를 업로드해야 한다.
+==Result==
+  # HTTP 200  : OK
+    {{{
+{
+  "data": [
+    {
+      "_id": "507291096a8745f40300002b",
+      "created_at": "2012-10-08T08:38:33Z",
+      "description": "test descripion",
+      "hashtags": null,
+      "like_count": 0,
+      "recipients": [
+        "Afafadfadf",
+        "BBBBB"
+      ],
+      "referred_users": null,
+      "scope": "public",
+      "updated_at": "2012-10-08T08:38:33Z",
+      "user_id": "506e64046a87457505000002",
+      "view_count": 0,
+      "user": {
+        "name": "dfafafad",
+        "email": "a2@test.com",
+        "fb_user_id": "1726051469",
+        "avatar_url": {
+          "thumbnail": "/uploads/../a.jpg",
+          "original": "/uploads/../a.jpg"
+        }
+      },
+      "movie": {
+        "_id": "507291096a8745f40300002c",
+        "created_at": "2012-10-08T08:38:33Z",
+        "file_content_type": "",
+        "file_file_name": "VID_20120907_214125.mp4",
+        "file_file_size": 8169968,
+        "file_updated_at": "2012-10-08T08:38:33+00:00",
+        "name": "test name",
+        "play_count": 0,
+        "post_id": "507291096a8745f40300002b",
+        "processing": false,
+        "remote_source": null,
+        "remote_url": null,
+        "thumbnails": [
+          “http://a.com/a.png”,“http://a.com/b.png”
+        ],
+        "updated_at": "2012-10-08T08:38:46Z",
+        "file_url": {
+          "mp4": "/uploads/movies/5072/9109/6a87/45f4/0300/002c/mp4/VID_20120907_214125.mp4",
+          "flv": "/uploads/movies/5072/9109/6a87/45f4/0300/002c/flv/VID_20120907_214125.flv",
+          "thumbnail": "/uploads/movies/5072/9109/6a87/45f4/0300/002c/thumbnail/VID_20120907_214125.png"
+        }
+      }
+    }
+  ]
+}
+    }}}
+      * _id : Post의 id
+      * created_at : 생성 시각
+      * description : 사용자가 입력한 글
+      * hashtags : Tag 의 목록
+      * recipients : ’scope’ 의 값이 ‘restricted’ 일 경우, 이 post를 볼 수 있는 사람들의 id 목록이 들어가게 됨.
+      * referred_users : 멘션(@) 된 사용자들의 id
+      * scope : 이 포스트의 공개 범위.
+        * 'public'  :  이 scope 일 경우, 이 포스트는 모든 사용자들이 조회할 수 있다. 그러나 모든 사용자에게 ActionFeed가 생성되는것은 아니고, 친구들(그중에서도 Follower들)에게만 우선 피드가 생성된다.
+        * 'friends' : 친구 관계인 사람들(Follwer/Following모두)만 볼 수 있으며, Feed는 각 친구들(중 Follwer들만)을 대상으로생성된다.
+        * 'onlyme'  : 오로지 자기만 볼 수 있다.
+        * 'restricted' : Follower 중 지정된 사용자만 볼 수 있다.
+      * updated_at : 이 포스트가 수정된 날짜.
+      * user_id :	이 포스트를 작성한 사용자의 id
+      * user.name :	사용자 이름
+      * user.email :	사용자 이메일 주소
+      * user.fb_user_id :	사용자의 페이스북 아이디
+      * user.avatar_thumbnail :	사용자 아바타 이미지의 썸네일 버전 위치
+      * user.avatar_original :	사용자 아바타 이미지의 원본 위치.
+      * movie.created_at :	무비의 생성 시각.
+        외부 링크를 통해 생성된 무비에는 이 값이 없음.
+      * movie.file_content_type
+        무비의 파일 타입 (MIME TYPE)
+        외부 링크를 통해 생성된 무비에는 이 값이 없음.
+      * movie.file_file_name : 무비 파일 자체의 이름
+        외부 링크를 통해 생성된 무비에는 이 값이 없음.
+      * movie.file_file_size : 무비 파일의 크기
+        외부 링크를 통해 생성된 무비에는 이 값이 없음.
+      * movie.file_updated_at :	무비 파일이 변경된 시각.
+         외부 링크를 통해 생성된 무비에는 이 값이 없음.
+      * movie.name : 무비의 이름 (타이틀)
+      * movie.post_id :	이 무비를 게제한 post의 id
+      * movie.processing :	직접 무비 파일을 업로드한 경우, 무비파일을 트랜스코딩 하고 CMS서버에 업로드하는 등의 과정에는 시간이 걸리는데, 이 작업이 진행중이라서 아직 웹이나 앱에서 재생이 불가능한 상태라면 이 값이 true가 된다.
+      * movie.remote_source :	외부 링크를 통해 생성된 무비의 경우. 이 무비가 제공되는 서비스의 이름이 들어감. 예) YouTube
+      * movie.remote_url :	외부 링크를 통해 생성된 무비의 경우. 무비의 play 가능 URL
+      * movie.thumbnails :	무비의 썸네일 이미지 경로. 여러개의 썸네일 이미지를 가질 수 있으므로 배열형 전달 됨.
+      * movie.updated_at :	이 무비 정보 자체가 DB에서 변경된 시각.
+      * movie.file_url :	mp4,flv,thumbnail 등의 다운로드 가능 경로.
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+		 JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+		 {{{ {"data":"user not found"} }}}
+
+
+
+
+
+
+
+
+
+
+
+=17. 친구들의 Post 목록=
+
+
+==API URL==
+	/api/v1/posts/of_friends.json
+==HTTP cmd==
+	GET
+==목적==
+	현재 사용자가 follow 하고 있는 사용자들의 Post 목록을 반환한다.
+아직 결과 JSON 포멧 (POST 정보)이 확정되지 않음.
+==Parameters==
+  * auth_token (필수): ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+  * page :
+    여러개의 결과들 중 몇번째 페이지 것만 반환할 것인지. 
+    0부터 시작.
+    각 페이지별로 20개의 결과가 반환 됨.
+  * get_count (optional):
+    만일 이 파라미터가 지정되고 그 값이 true라면, auth_token 파라미터를 제외하고는 의미가 없고, 친구들의 post들  총 갯수만 반환하고 끝나게 됨.
+==Result==
+  # HTTP 200  : OK
+    JSON 형식이며, “data” 필드에 앞서 ‘동영상 Post 등록' API의 결과에서 나온 Post 정보들의 배열이 반환 됨.
+    {{{ 
+{“data”:
+  [
+   {
+     "_id"=>"505fcde26a87453d1500001d", 
+     "created_at"=>Mon, 24 Sep 2012 03:05:06 UTC +00:00,
+     "description"=>"test", 
+     "hashtags"=>nil, 
+     "recipients"=>[],
+     "referred_users"=>nil, 
+     "scope"=>"friends",
+     "updated_at"=>Mon, 24 Sep 2012 03:05:06 UTC +00:00,
+     "user_id"=>"4",
+     “user” => {...},
+     “movie” => {...}
+   }
+   ,
+   ….
+  ] 
+}
+    }}}
+    만일 ‘get_count’ 파라미터가 true 로 지정되어 있다면, 총 목록의 수가 반환됨. {“data”:200}
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"user not found"} }}}
+
+
+
+
+
+
+
+
+
+
+
+
+=18. 인기 Post 목록=
+
+
+==API URL==
+	/api/v1/posts/popular.json
+==HTTP cmd==
+	GET
+==목적==
+	현재 사용자가 follow 하고 있는 사용자들의 Post 목록을 반환한다.
+==Parameters==
+  * auth_token (필수): ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+  * page :
+    여러개의 결과들 중 몇번째 페이지 것만 반환할 것인지. 
+    0부터 시작.
+    각 페이지별로 20개의 결과가 반환 됨.
+  * get_count (optional):
+    만일 이 파라미터가 지정되고 그 값이 true라면, auth_token 파라미터를 제외하고는 의미가 없고, 친구들의 post들  총 갯수만 반환하고 끝나게 됨.
+==Result==
+  # HTTP 200  : OK
+    JSON 형식이며, “data” 필드에 앞서 ‘동영상 Post 등록' API의 결과에서 나온 Post 정보들의 배열이 반환 됨.
+    {{{
+{“data”:
+  [
+   {
+     "_id"=>"505fcde26a87453d1500001d", 
+     "created_at"=>Mon, 24 Sep 2012 03:05:06 UTC +00:00,
+     "description"=>"test", 
+     "hashtags"=>nil, 
+     "recipients"=>[],
+     "referred_users"=>nil, 
+     "scope"=>"friends",
+     "updated_at"=>Mon, 24 Sep 2012 03:05:06 UTC +00:00,
+     "user_id"=>"4",
+     “user” => {...},
+     “movie” => {...}
+   }
+   ,
+   ….
+  ] 
+}
+    }}}
+    만일 ‘get_count’ 파라미터가 true 로 지정되어 있다면, 총 목록의 수가 반환됨. {“data”:200}
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"user not found"} }}}
+	
+
+
+
+
+
+
+
+
+
+
+=19. 모든 Post 목록=
+
+
+==API URL==
+	/api/v1/posts.json
+==HTTP cmd==
+	GET
+==목적==
+	모든 포스트의 목록을 반환한다.
+아직 결과 JSON 포멧 (POST 정보)이 확정되지 않음.
+==Parameters==
+  * auth_token (필수): ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+  * page :
+    여러개의 결과들 중 몇번째 페이지 것만 반환할 것인지. 
+    0부터 시작.
+    각 페이지별로 20개의 결과가 반환 됨.
+  * get_count (optional):
+    만일 이 파라미터가 지정되고 그 값이 true라면, auth_token 파라미터를 제외하고는 의미가 없고, 모든 post 들 총 갯수만 반환하고 끝나게 됨.
+==Result==
+  # HTTP 200  : OK
+    JSON 형식이며, “data” 필드에 앞서 ‘동영상 Post 등록' API의 결과에서 나온 Post 정보들의 배열이 반환 됨.
+    {{{
+{“data”:
+  [
+   {
+     "_id"=>"505fcde26a87453d1500001d", 
+     "created_at"=>Mon, 24 Sep 2012 03:05:06 UTC +00:00,
+     "description"=>"test", 
+     "hashtags"=>nil, 
+     "recipients"=>[],
+     "referred_users"=>nil, 
+     "scope"=>"friends",
+     "updated_at"=>Mon, 24 Sep 2012 03:05:06 UTC +00:00,
+     "user_id"=>"4",
+     “user” => {...},
+     “movie” => {...}
+   }
+   ,
+   ….
+  ] 
+}
+    }}}
+    만일 ‘get_count’ 파라미터가 true 로 지정되어 있다면, 총 목록의 수가 반환됨. {“data”:5900000}
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"user not found"} }}}
+
+
+
+
+
+
+
+
+
+
+=20. Feed 수신=
+
+
+==API URL==
+	/api/v1/action_feeds.json
+==HTTP cmd==
+	GET
+==목적==
+	Feed란 특정 사용자를 위해 추려진 activity의 목록으로, 이 Web API는 현재 사용자가 볼 수 있는 최근의  activity 목록을 반환하게 된다.
+==Parameters==
+  * auth_token (필수): ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+  * page :
+    여러개의 결과들 중 몇번째 페이지 것만 반환할 것인지. 
+    0부터 시작.
+    각 페이지별로 20개의 결과가 반환 됨.
+  * get_count (optional):
+    만일 이 파라미터가 지정되고 그 값이 true라면, auth_token 파라미터를 제외하고는 의미가 없고, 총 갯수만 반환하고 끝나게 됨.
+==Result==
+  # HTTP 200  : OK
+    JSON 형식이며, “data” 필드에 Feed 정보들의 배열이 반환 됨.
+    {{{
+{“data”:
+  [
+   {
+     "_id"=>"505fcde26a87453d1500001d", 
+     "reader_id"=>1,
+     "action"=>{
+       "actor_id"=>1, 
+       "action_type"=>0, 
+       "target_type"=>0,
+       "target_id"=>nil,
+       “user” => {...},
+       “movie” => {...}
+     }
+   }
+   ,
+   ….
+  ] 
+}
+    }}}
+      * _id : Feed 의 id
+      * reader_id : 이 Feed를 보게 될 사람. 현재 사용자와 동일한 id 값을 갖는다.
+      * action : 이 Feed와 연결된 Action의 정보
+        * action.action_id : Action 의 id
+        * action.action_type : 수행한 Action의 종류
+          * 0: 'Comment'
+          * 1: 'Like/Dislike'
+          * 2: 'Follow request' (수락/거절/블록 등의 action은 피드로 나타날 필요가 없음)
+          * 3: 'Play movie'
+          * 4: 'Post Movie'
+        * action.target_type :	Action을 수행한 대상의 종류.
+          * 0 : Post
+          * 1 : Comment
+        * action.target_id : Action을 수행한 대상(ActionTarget) 의 id 로서, 앞서 'target_type'에 따라 그에 매치되는 MongoDb 레코드 id 에 매치 된다.
+      * user : user 정보. (상세 필드는 16.post생성 항목을 참고)
+      * movie : movie 정보. (상세 필드는 16.post생성 항목을 참고)
+    만일 ‘get_count’ 파라미터가 true 로 지정되어 있다면, 총 목록의 수가 반환됨. {“data”:200}
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"user not found"} }}}
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+=21. Post에 Comment(댓글) 작성.=
+
+
+==API URL==
+	/api/v1/posts/create_comment.json
+==HTTP cmd==
+	POST
+==목적==
+	특정 포스트에 댓글을 단다.
+==Parameters==
+  * auth_token (필수): ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+  * description : 댓글의 내용
+  * post_id : 댓글을 달 post의 id
+  * reply_to_id : 특정 댓글에 대한 댓글일 경우, 그 댓글의 id
+==Result==
+  # HTTP 200  : OK
+    JSON 형식이며, “data” 필드에 새로 생성한 comment 정보가 반환 됨.
+    {{{
+{“data”:
+   {
+     "_id"=>"505fcde26a87453d1500001d", 
+     "user_id"=>1, 
+     "description"=>”testetest”,
+     "post_id"=>"505fcde26a87453d1500001d", 
+     "reply_to_id"=>"505fcde26a87453d1500001d", , 
+     "created_at"=>Mon, 24 Sep 2012 03:05:06 UTC +00:00,
+     "updated_at"=>Mon, 24 Sep 2012 03:05:06 UTC +00:00
+     }
+   }
+}
+    }}}
+    * _id : comment 의 id
+    * user_id : 이 코멘트를 작성한 사용자의 id
+    * description : comment의 내용.
+    * post_id : 코멘트를 단 post의 id
+    * reply_to_id : 코멘트를 단 댓글의  id. 즉, 댓글에 대한 댓글일 경우 이 값은 대상 댓글의  id 값을 가지게 됨.
+    * created_at : 댓글 생성일
+    * updated_at : 댓글 변경일
+    ...
+    ...
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"user not found"} }}}
+    
+
+
+
+
+
+
+
+
+
+
+
+
+=22. 댓글 삭제.=
+
+
+==API URL==
+	/api/v1/posts/delete_comment.json
+==HTTP cmd==
+	POST
+==목적==
+	댓글을 삭제 한다.
+==Parameters==
+  * auth_token (필수): ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+  * id : 삭제할  댓글의 id
+==Result==
+  # HTTP 200  : OK
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"user not found"} }}}
+
+
+
+
+
+
+
+
+
+
+
+
+=23. 특정 포스트에 대한 댓글 목록 확인.=
+
+
+==API URL==
+	/api/v1/posts/comments.json
+==HTTP cmd==
+	POST
+==목적==
+	특정 포스트에 달린 댓글들의 못록을 확인한다.
+==Parameters==
+  * auth_token (필수): ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+  * id : 확인코자 하는 포스트의 id
+  * page : 전체 댓글 목록중 몇번째 페이지?
+==Result==
+  # HTTP 200  : OK
+    {{{
+{
+  "data": [
+    {
+      "_id": "507659556a87458a21000001",
+      "created_at": "2012-10-11T05:29:57Z",
+      "description": "Fucking Funny",
+      "post_id": "507291096a8745f40300002b",
+      "reply_to_id": null,
+      "updated_at": "2012-10-11T05:29:57Z",
+      "user_id": "506e632f6a87457505000001",
+      "user": {
+          "_id": "506e64046a87457505000002",
+          "created_at": "2012-10-05T04:37:24Z",
+          "email": "a2@test.com",
+          "fb_user_id": "1726051469",
+          "name": "dfafafad",
+          "updated_at": "2012-10-09T01:42:15Z",
+          "avatar_url": {
+            "thumbnail": "/uploads/../a.jpg",
+            "original": "/uploads/../a.jpg"
+          }
+        }
+    },
+    {
+      "_id": "50765bfa6a87458a21000005",
+      "created_at": "2012-10-11T05:41:14Z",
+      "description": "Fucking Funny",
+      "post_id": "507291096a8745f40300002b",
+      "reply_to_id": null,
+      "updated_at": "2012-10-11T05:41:14Z",
+      "user_id": "506e632f6a87457505000001",
+      "user": {
+          "_id": "506e64046a87457505000002",
+          "created_at": "2012-10-05T04:37:24Z",
+          "email": "a2@test.com",
+          "fb_user_id": "1726051469",
+          "name": "dfafafad",
+          "updated_at": "2012-10-09T01:42:15Z",
+          "avatar_url": {
+            "thumbnail": "/uploads/../a.jpg",
+            "original": "/uploads/../a.jpg"
+          }
+        }
+    }
+  ]
+}
+    }}}
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"user not found"} }}}
+
+
+
+
+
+
+
+
+
+
+=24. Post에 대한 좋아요.=
+
+
+==API URL==
+	/api/v1/posts/like_post.json
+==HTTP cmd==
+	POST
+==목적==
+	특정 Post에 대하여 ‘좋아요' 를 수행.
+==Parameters==
+  * auth_token (필수): ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+  * id : 좋아요  할 post의 id
+==Result==
+  # HTTP 200  : OK
+    {{{ {"data":"ok"} }}}
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"You already liked it"} }}}
+
+
+
+
+
+
+
+
+
+=25. Comment에 대한 좋아요.=
+
+
+==API URL==
+	/api/v1/posts/like_comment.json
+==HTTP cmd==
+	POST
+==목적==
+	특정 Comment 에 대하여 ‘좋아요' 를 수행.
+==Parameters==
+  * auth_token (필수): ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+  * id : 좋아요  할 comment 의 id
+==Result==
+  # HTTP 200  : OK
+    {{{ {"data":"ok"} }}}
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"You already liked it"} }}}
+
+
+
+
+
+
+
+
+
+
+
+=26.‘좋아요’ 취소.=
+
+
+==API URL==
+	/api/v1/posts/unlike.json
+==HTTP cmd==
+	POST
+==목적==
+	좋아요 한 것을 취소한다.
+==Parameters==
+  * auth_token (필수): ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+  * type: “post” 또는 “comment”
+  * id : “post” 또는 “comment” 의 id
+==Result==
+  # HTTP 200  : OK
+    {{{ {"data":"ok"} }}}
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"user not found"} }}}
+
+
+
+
+
+
+
+
+=27. 사용자 정보 변경.=
+
+
+==API URL==
+	/api/v1/users/:id
+==HTTP cmd==
+	PUT
+==목적==
+	(:id) 로 지정된 사용자의 정보를 변경.
+==Parameters==
+  HTTP multipart 로 form data를 전송.
+  * auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+  * user[name] : 사용자의 이름.
+  * user[avatar] : 이 부분에  HTTP Multipart로 실제 동영상 데이터를 업로드해야 한다.
+==Result==
+  # HTTP 200  : OK
+    {{{
+ {
+  "data": {
+    "_id": "506e64046a87457505000002",
+    "avatar_content_type": "image/png",
+    "avatar_file_name": "smile_big_icon2.png",
+    "avatar_file_size": 33856,
+    "avatar_updated_at": "2012-10-09T01:42:14+00:00",
+    "created_at": "2012-10-05T04:37:24Z",
+    "email": "a2@test.com",
+    "fb_user_id": "1726051469",
+    "name": "dfafafad",
+    "updated_at": "2012-10-09T01:42:15Z"
+  }
+}
+    }}}
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+
+
+
+
+
+
+
+
+
+=28. 사용자 정보 보기=
+
+
+==API URL==
+	/api/v1/users/:id
+==HTTP cmd==
+	GET
+==목적==
+	(:id) 로 지정된 사용자의 정보를 확인
+==Parameters==
+  * auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+==Result==
+  # HTTP 200  : OK
+    {{{
+{
+  "data": {
+    "_id": "506e64046a87457505000002",
+    "created_at": "2012-10-05T04:37:24Z",
+    "email": "a2@test.com",
+    "fb_user_id": "1726051469",
+    "name": "dfafafad",
+    "updated_at": "2012-10-09T01:42:15Z",
+    "avatar_url": {
+      "thumbnail": "/uploads/../a.jpg",
+      "original": "/uploads/../a.jpg"
+    }
+  }
+}
+    }}}
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"user not found"} }}}
+	
+
+
+
+
+
+
+
+
+
+=29. 특정 포스트의 상세 정보 확인.=
+
+
+==API URL==
+	/api/v1/posts/show.json
+==HTTP cmd==
+	POST
+==목적==
+	특정 포스트의 상세 정보를 확인한다.
+==Parameters==
+  * auth_token (필수): ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+  * id : 확인코자 하는 포스트의 id
+==Result==
+  # HTTP 200  : OK
+    {{{
+{
+  "data": {
+    "_id": "50a06792921e00e226000001",
+    "comment_count": 1,
+    "created_at": "2012-11-12T03:05:54Z",
+    "description": "ddxx",
+    "hashtags": null,
+    "like_count": 1,
+    "recipients": [
+      "Afafadfadf",
+      "BBBBB"
+    ],
+    "referred_users": null,
+    "scope": "public",
+    "updated_at": "2012-11-20T01:03:27Z",
+    "user_id": "50a0613e921e00ad23000001",
+    "view_count": 3,
+    "movie": {
+      "_id": "50a06792921e00e226000002",
+      "created_at": "2012-11-12T03:05:54Z",
+      "file_content_type": "",
+      "file_file_name": "VID_20120907_214125.mp4",
+      "file_file_size": 8169968,
+      "file_updated_at": "2012-11-12T03:05:54+00:00",
+      "name": "dddd",
+      "play_count": 0,
+      "post_id": "50a06792921e00e226000001",
+      "processing": false,
+      "remote_source": null,
+      "remote_url": null,
+      "thumbnails": [
+        
+      ],
+      "updated_at": "2012-11-12T03:06:03Z"
+    },
+    "comments": [
+      {
+        "_id": "50aad3e2921e009a45000001",
+        "created_at": "2012-11-20T00:50:42Z",
+        "description": "\u314e\u314e\u314e",
+        "post_id": "50a06792921e00e226000001",
+        "reply_to_id": null,
+        "updated_at": "2012-11-20T00:50:42Z",
+        "user_id": "50a0613e921e00ad23000001"
+      }
+    ],
+    "likes": [
+      {
+        "_id": "50aad690921e009a45000004",
+        "comment_id": null,
+        "created_at": "2012-11-20T01:02:08Z",
+        "post_id": "50a06792921e00e226000001",
+        "updated_at": "2012-11-20T01:02:08Z",
+        "user_id": "50a0613e921e00ad23000001"
+      }
+    ]
+  }
+}
+    }}}
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"user not found"} }}}
+
+
+
+
+
+
+
+
+
+=30.Facebook 친구 찾기=
+
+
+==API URL==
+	/api/v1/users/find_by_fbid.json
+==HTTP cmd==
+	POST
+==목적==
+	현재 서비스를 사용중인  Facebook 친구들을 찾는다.
+  클라이언트는 자신의 Facebook 친구들의 Facebook id 목록을 보내고, 서버는 그 Facebook id 목록의  Facebook id를 사용하고 있는, 현재 서비스를 사용하고 있는 사용자들을 조회하여, 찾아진 결과를 클라이언트에 반환한다.
+  서버의 응답에 포함되는 사용자들은 이니 초코캠 서비스를 사용하고 있는 사용자이므로, 이 사용자들에게 follow 요청을 할 수 있다는 의미가 된다.
+==Parameters==
+  * auth_token (필수): ‘tokens.json’ API를 통해 얻어 온 토큰 정보
+  * fb_ids[] : 현자 사용자의 Facebook 친구들의  Facebook id
+==Result==
+  # HTTP 200  : OK
+    {{{
+{"data":[{"_id":"50a0613e921e00ad23000001","fb_user_id":"1726051469"}]}
+    }}}
+  # HTTP 4XX : 클라이언트 에러
+  # HTTP 5XX : 서버 에러
+    JSON 형식이며, “data” 필드에 오류 원인이 반환됨.
+    {{{ {"data":"user not found"} }}}
+    
