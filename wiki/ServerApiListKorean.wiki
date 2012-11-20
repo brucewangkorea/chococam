@@ -296,8 +296,7 @@ Result
 	현재 사용자가 특정 id의 사용자에게 follow 요청을 보냄.
 ==Parameters==
   # auth_token: ‘tokens.json’ API를 통해 얻어 온 토큰 정보
-    * to :
-    * follow하고자 하는 대상 사용자의 id.
+  # to : follow하고자 하는 대상 사용자의 id.
 ==Result==
   # HTTP 200  : OK
     {"data":"ok"}
