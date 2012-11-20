@@ -1,0 +1,193 @@
+#InstallUbuntu
+Install guide for Ubuntu (12.10 64 Desktop)
+
+
+{{{
+cd ~
+mkdir tmp
+cd tmp
+}}}
+
+= Ruby = 
+Ruby version should be 1.9.3 or higher.
+
+{{{
+# Install required libraries and tools
+sudo apt-get -y update
+sudo apt-get -y install build-essential zlib1g-dev libssl-dev libreadline-dev libyaml-dev libcurl4-openssl-dev curl git-core python-software-properties
+sudo apt-get install vim
+
+# Download Ruby 1.9.3 source and compile/install.
+wget ftp://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p194.tar.gz
+tar -xvzf ruby-1.9.3-p194.tar.gz
+cd ruby-1.9.3-p194/
+./configure
+make
+sudo make install
+echo "gem: --no-ri --no-rdoc" >> ~/.gemrc
+sudo gem install bundler
+
+# Install Gem
+sudo /usr/local/bin/gem update --system
+sudo /usr/local/bin/gem update
+}}}
+
+
+
+= Rails =
+{{{
+sudo /usr/local/bin/gem install rails passenger
+}}}
+
+
+= Mysql server and mysql gem =
+{{{
+> When the installer ask about the MySql password for root,
+> type in the same password specified in the 'config/database.yml' file in the 
+> our Rails server source directory.
+> Currently it is 'root' in that configuration file
+sudo apt-get install mysql-server mysql-client
+sudo /etc/init.d/mysql restart
+sudo apt-get install libmysql-ruby
+sudo apt-get install libmysqlclient-dev
+sudo gem install mysql 
+}}}
+
+= imagemagick, rmagick =
+'imagemagick' is well-known image processing tool, and rmagick is gem for using imagemagick from RoR.
+{{{
+sudo apt-get install imagemagick --fix-missing
+sudo apt-get install graphicsmagick-libmagick-dev-compat
+sudo apt-get install librmagick-ruby
+sudo apt-get install libmagickwand-dev
+sudo gem install rmagick
+}}}
+
+= mongodb =
+{{{
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
+> issue following command from command line
+> sudo vim /etc/apt/sources.list
+> and add following line..
+deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen
+> save the file and exit from 'vim'.
+
+> now install mongodb
+sudo apt-get update
+sudo apt-get install mongodb-10gen
+sudo service mongodb start
+}}}
+
+= Check out the server code and bundle install =
+{{{
+sudo apt-get install subversion
+cd ~
+mkdir svn
+cd svn
+svn checkout http://chococam.googlecode.com/svn/trunk/ chococam-read-only
+sudo apt-get install libxslt-dev libxml2-dev
+sudo gem install nokogiri
+cd ~/svn/chococam-read-only/trunk/server
+bundle install
+}}}
+
+= delayed_job for mongoid =
+'delayed_job' is the gem enabling RoR to do the background job.
+
+Check the MySql configuration file, especially the 'Socket file' location.
+{{{
+> vim /etc/mysql/my.cnf 
+}}}
+
+Change the 'config/database.yml' file in our rails server source directory
+if the socket file location is different from the 'my.cnf' file.
+{{{
+# Open RoR config file.
+> vim config/database.yml
+# ex) Change the socket file location
+# from '/var/lib/mysql/mysql.sock' to '/var/run/mysqld/mysqld.sock'.
+}}}
+
+
+Issue the following command to set up the Database structure.
+{{{
+rake db:create
+rake db:create RAILS_ENV=production
+script/rails runner 'Delayed::Backend::Mongoid::Job.create_indexes'
+}}}
+
+
+= ffmpeg =
+'ffmpeg' is well-known movie transcoding tool.
+Following process downloads source code and compile so it takes quite of time.
+
+{{{
+sudo apt-get remove ffmpeg x264 libav-tools libvpx-dev libx264-dev
+sudo apt-get update
+sudo apt-get -y install autoconf build-essential checkinstall git libfaac-dev libgpac-dev \
+  libjack-jackd2-dev libmp3lame-dev libopencore-amrnb-dev libopencore-amrwb-dev \
+  librtmp-dev libsdl1.2-dev libtheora-dev libtool libva-dev libvdpau-dev libvorbis-dev \
+  libx11-dev libxext-dev libxfixes-dev pkg-config texi2html yasm zlib1g-dev
+}}}
+== install x264 codec ==
+{{{
+cd
+git clone --depth 1 git://git.videolan.org/x264
+cd x264
+./configure --enable-static
+make
+sudo checkinstall --pkgname=x264 --pkgversion="3:$(./version.sh | \
+  awk -F'[" ]' '/POINT/{print $4"+git"$5}')" --backup=no --deldoc=yes \
+  --fstrans=no --default
+}}}
+== fdk-aac ==
+{{{
+cd
+git clone --depth 1 git://github.com/mstorsjo/fdk-aac.git
+cd fdk-aac
+autoreconf -fiv
+./configure --disable-shared
+make
+sudo checkinstall --pkgname=fdk-aac --pkgversion="$(date +%Y%m%d%H%M)-git" --backup=no \
+  --deldoc=yes --fstrans=no --default
+
+}}}
+== libvpx  ==
+{{{
+cd
+git clone --depth 1 http://git.chromium.org/webm/libvpx.git
+cd libvpx
+./configure
+make
+sudo checkinstall --pkgname=libvpx --pkgversion="1:$(date +%Y%m%d%H%M)-git" --backup=no \
+  --deldoc=yes --fstrans=no --default
+}}}
+
+== FFmpeg ==
+In 'Ubuntu Server' case, you need to omit '--enable-x11grab' parameter
+{{{
+cd
+git clone --depth 1 git://source.ffmpeg.org/ffmpeg
+cd ffmpeg
+./configure --enable-gpl --enable-libfaac --enable-libfdk-aac --enable-libmp3lame \
+  --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-librtmp --enable-libtheora \
+  --enable-libvorbis --enable-libvpx --enable-x11grab --enable-libx264 --enable-nonfree \
+  --enable-version3
+make
+sudo checkinstall --pkgname=ffmpeg --pkgversion="7:$(date +%Y%m%d%H%M)-git" --backup=no \
+  --deldoc=yes --fstrans=no --default
+hash x264 ffmpeg ffplay ffprobe
+}}}
+
+== qt-faststart ==
+{{{
+cd ~/ffmpeg
+make tools/qt-faststart
+sudo checkinstall --pkgname=qt-faststart --pkgversion="$(date +%Y%m%d%H%M)-git" --backup=no \
+  --deldoc=yes --fstrans=no --default install -Dm755 tools/qt-faststart \
+  /usr/local/bin/qt-faststart
+
+}}}
+
+
+The rest of the process is the same as that of 'CentOs' installation guide.
