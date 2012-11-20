@@ -2,7 +2,8 @@
 
 
 = Ruby 설치 = 
-Ruby 버전은 1.9.3 이상이어야 한다.
+Ruby 버전은 1.9.3 이상이어야만 합니다.
+다음과 같이 필수 라이브러리를 사전에 다운 받아 컴파일/설치하고, 마찬가지로 Ruby 1.9.3 버전의 소스를 다운로드하여 컴파일/설치 합니다.
 {{{
 # Install libyml
 cd /usr/local/src
@@ -25,6 +26,7 @@ cd ..
 }}}
 
 = RubyGem 설치 =
+Ruby Gem은 Ruby에서 사용하는 일종의 라이브러리인 Gem 들을 설치/관리 할 수 있는 명령어(프로그램)입니다.
 {{{
 wget https://rubyforge.org/frs/download.php/74922/rubygems-1.8.4.tgz --no-check-certificate
 tar xzvf rubygems-*.tgz
@@ -32,7 +34,7 @@ cd rubygems-*
 /usr/local/bin/ruby setup.rb
 cd ..
 
-#Check if RubyGems has any updates available to the system and to any Gems that may have already been installed:
+#Gem 환경을 최신상태로 업데이트 해 줍니다.
 
 /usr/local/bin/gem update --system
 /usr/local/bin/gem update
@@ -50,10 +52,12 @@ cp my.cnf /etc/my.cnf
 mysql_install_db
 
 # mysql gem 설치
+# RoR 서버에서 mysql 접속을 할 수 있도록 도와주는 gem을 설치합니다.
 /usr/local/bin/gem install mysql -- --with-mysql-config=/usr/bin/mysql_config
 }}}
 
 = imagemagick, rmagick 설치 =
+imagemagick은 이미지 파일을 확대/축소/변환하는 아주 유용한 명령어(프로그램) 입니다. 그리고 rmagick은 RoR서버에서 imagemagick을 사용할 수 있도록 도와주는 gem 입니다.
 {{{
 rpm -Uvh http://rbel.co/rbel5
 yum install ImageMagick-devel ImageMagick-c++-devel
@@ -86,6 +90,8 @@ yum -y install gcc-c++
 bundle install
 }}}
 = delayed_job for mongoid 설치 =
+delayed_job 은 RoR에서 백그라운드로 작업을 수행할 수 있도록 도와주는 gem 입니다.
+
 먼저 mysql 접속이 가능한지 mysql 코맨드라인으로 접속 테스트,
 rails 프로젝트 소스의 config/database.yml 파일 설정도 체크한다. 
 
@@ -96,12 +102,15 @@ UPDATE mysql.user SET Password=PASSWORD('password')
 FLUSH PRIVILEGES;
 }}}
 다음으로, 다음의 명령을 서버소스 프로젝트 디렉토리에서 수행.
+(RoR에서 사용하는 DataBase (MongoDb) 관련 초기화 과정을 하는 과정입니다.)
 {{{
 rake db:create
 rake db:create RAILS_ENV=production
 script/rails runner 'Delayed::Backend::Mongoid::Job.create_indexes'
 }}}
 = ffmpeg 설치 =
+ffmpeg은 동영상을 변환하는 아주 유명한 오픈소스 프로그램(명령어) 입니다.
+
 {{{
 rpm --import http://apt.sw.be/RPM-GPG-KEY.dag.txt
 > vi /etc/yum.repos.d/Centos-DAG.repo
