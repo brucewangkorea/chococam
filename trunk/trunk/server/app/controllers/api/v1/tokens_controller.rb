@@ -45,6 +45,14 @@ class Api::V1::TokensController  < ApplicationController
       else
         render :status=>200, :json=>{:token=>@user.authentication_token}
       end
+    rescue Mongoid::Errors::DocumentNotFound
+      # 2012-11-19 brucewang
+      # 없는 사용자에 대한 요청 처리.
+      if facebook_id.nil?
+        render :status=>500, :json=>{:data=>"ooops Invalid email or password."}
+      else
+        render :status=>500, :json=>{:data=>"Record not found"}
+      end
     end
 
 
