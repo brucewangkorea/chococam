@@ -553,7 +553,7 @@ public class RestfulClient {
 			conn.setReadTimeout(mTimeout);
 			// 2012-11-12 brucewang
 			// bug fix for 'OutOfMemory'
-			conn.setChunkedStreamingMode(4096);
+			//conn.setChunkedStreamingMode(4096);
 			
 			
 			if( mUserId!=null && mUserId.length()>0 ){

@@ -78,7 +78,9 @@ public class RecommendedFriends extends Fragment implements OnItemClickListener
 						// 이미 친구인 경우는 화면상에 보여주지 않음.
 						boolean bIsFriend = false;
 						for( SocialServerApis.ChocoUser fr : mCurrentFrieds ){
-							if( fr.fb_user_id.equals(strId) ){
+							// 2012-11-21 brucewang
+							// null check
+							if( fr.fb_user_id!=null && fr.fb_user_id.equals(strId) ){
 								bIsFriend = true;
 								break;
 							}
