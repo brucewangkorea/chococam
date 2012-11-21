@@ -96,6 +96,7 @@ class Api::V1::UsersController  < ApplicationController
   	only_accepted = params[:only_accepted]
   	if( onlyaccepted!="true" && onlyaccepted!="false")
   		render :status=>500, :json=>{:data=>"Invalid parameter for onlyaccepted."}
+  		return
   	end
     only_accepted = params[:only_accepted]=="true" || false
     
@@ -120,6 +121,7 @@ class Api::V1::UsersController  < ApplicationController
   	only_accepted = params[:only_accepted]
   	if( onlyaccepted!="true" && onlyaccepted!="false")
   		render :status=>500, :json=>{:data=>"Invalid parameter for onlyaccepted."}
+  		return
   	end
     only_accepted = params[:only_accepted]=="true" || false
     
@@ -159,6 +161,7 @@ class Api::V1::UsersController  < ApplicationController
   	only_accepted = params[:only_accepted]
   	if( onlyaccepted!="true" && onlyaccepted!="false")
   		render :status=>500, :json=>{:data=>"Invalid parameter for onlyaccepted."}
+  		return
   	end
     only_accepted = params[:only_accepted]=="true" || false
     
@@ -173,6 +176,7 @@ class Api::V1::UsersController  < ApplicationController
   	only_accepted = params[:only_accepted]
   	if( onlyaccepted!="true" && onlyaccepted!="false")
   		render :status=>500, :json=>{:data=>"Invalid parameter for onlyaccepted."}
+  		return
   	end
     only_accepted = params[:only_accepted]=="true" || false
     
@@ -201,6 +205,16 @@ class Api::V1::UsersController  < ApplicationController
 
   def unfollow
     to = params[:to]
+    
+    # 2012-11-21 brucewang
+    # 존재하지 않는 사용자에 대한 처리 (refs #276)
+    user_exists = User.where(id: to).exists?()
+    if !user_exists
+      render :status=>406, :json=>{:data=>"user with that id does not exists"}
+      return
+    end
+    
+    
     # unfollow 할 때는 대상 사용자가 서비스를 탈퇴해서 조회가 안되더라도
     # follow record를 지워주면 된다.
     Follow.unfollow(current_user.id, to)
@@ -211,6 +225,16 @@ class Api::V1::UsersController  < ApplicationController
     # accept/reject는 상대방이 나를 follow하는것을 허용/거부 하는것이기때문에
     # 함수의 파라미터 순서에 유의해야 한다.
     to = params[:to]
+    
+    # 2012-11-21 brucewang
+    # 존재하지 않는 사용자에 대한 처리 (refs #276)
+    user_exists = User.where(id: to).exists?()
+    if !user_exists
+      render :status=>406, :json=>{:data=>"user with that id does not exists"}
+      return
+    end
+    
+    
     Follow.accept( to, current_user.id )
     render :json=>{:data=>"ok"}
   end
@@ -219,6 +243,16 @@ class Api::V1::UsersController  < ApplicationController
     # accept/reject는 상대방이 나를 follow하는것을 허용/거부 하는것이기때문에
     # 함수의 파라미터 순서에 유의해야 한다.
     to = params[:to]
+    
+    # 2012-11-21 brucewang
+    # 존재하지 않는 사용자에 대한 처리 (refs #276)
+    user_exists = User.where(id: to).exists?()
+    if !user_exists
+      render :status=>406, :json=>{:data=>"user with that id does not exists"}
+      return
+    end
+    
+    
     Follow.reject( to, current_user.id )
     render :json=>{:data=>"ok"}
   end
@@ -228,6 +262,16 @@ class Api::V1::UsersController  < ApplicationController
     # Follow.block 함수의 파라미터 순서를 유의해야 한다.
     # 즉, 현재 사용자에게 to가 접근하는것을 막는것이다.
     to = params[:to]
+    
+    # 2012-11-21 brucewang
+    # 존재하지 않는 사용자에 대한 처리 (refs #276)
+    user_exists = User.where(id: to).exists?()
+    if !user_exists
+      render :status=>406, :json=>{:data=>"user with that id does not exists"}
+      return
+    end
+    
+    
     Follow.block( to, current_user.id )
     render :json=>{:data=>"ok"}
   end
@@ -237,6 +281,15 @@ class Api::V1::UsersController  < ApplicationController
     # Follow.unblock 함수의 파라미터 순서를 유의해야 한다.
     # 즉, 현재 사용자에게 to가 접근하는것에대한 제한을 삭제하는것이다.
     to = params[:to]
+    
+    # 2012-11-21 brucewang
+    # 존재하지 않는 사용자에 대한 처리 (refs #276)
+    user_exists = User.where(id: to).exists?()
+    if !user_exists
+      render :status=>406, :json=>{:data=>"user with that id does not exists"}
+      return
+    end
+    
     Follow.unblock( to, current_user.id )
     render :json=>{:data=>"ok"}
   end
