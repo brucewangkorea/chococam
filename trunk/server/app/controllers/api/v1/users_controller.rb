@@ -94,8 +94,8 @@ class Api::V1::UsersController  < ApplicationController
   	# 2012-11-21 brucewang
   	# 파라미터 유효성 체크 (refs #277)
   	only_accepted = params[:only_accepted]
-  	if( onlyaccepted!="true" && onlyaccepted!="false")
-  		render :status=>500, :json=>{:data=>"Invalid parameter for onlyaccepted."}
+  	if( only_accepted!="true" && only_accepted!="false")
+  		render :status=>500, :json=>{:data=>"Invalid parameter for only_accepted."}
   		return
   	end
     only_accepted = params[:only_accepted]=="true" || false
@@ -119,8 +119,8 @@ class Api::V1::UsersController  < ApplicationController
     # 2012-11-21 brucewang
   	# 파라미터 유효성 체크 (refs #277)
   	only_accepted = params[:only_accepted]
-  	if( onlyaccepted!="true" && onlyaccepted!="false")
-  		render :status=>500, :json=>{:data=>"Invalid parameter for onlyaccepted."}
+  	if( only_accepted!="true" && only_accepted!="false")
+  		render :status=>500, :json=>{:data=>"Invalid parameter for only_accepted."}
   		return
   	end
     only_accepted = params[:only_accepted]=="true" || false
@@ -159,8 +159,8 @@ class Api::V1::UsersController  < ApplicationController
     # 2012-11-21 brucewang
   	# 파라미터 유효성 체크 (refs #277)
   	only_accepted = params[:only_accepted]
-  	if( onlyaccepted!="true" && onlyaccepted!="false")
-  		render :status=>500, :json=>{:data=>"Invalid parameter for onlyaccepted."}
+  	if( only_accepted!="true" && only_accepted!="false")
+  		render :status=>500, :json=>{:data=>"Invalid parameter for only_accepted."}
   		return
   	end
     only_accepted = params[:only_accepted]=="true" || false
@@ -174,8 +174,8 @@ class Api::V1::UsersController  < ApplicationController
     # 2012-11-21 brucewang
   	# 파라미터 유효성 체크 (refs #277)
   	only_accepted = params[:only_accepted]
-  	if( onlyaccepted!="true" && onlyaccepted!="false")
-  		render :status=>500, :json=>{:data=>"Invalid parameter for onlyaccepted."}
+  	if( only_accepted!="true" && only_accepted!="false")
+  		render :status=>500, :json=>{:data=>"Invalid parameter for only_accepted."}
   		return
   	end
     only_accepted = params[:only_accepted]=="true" || false
