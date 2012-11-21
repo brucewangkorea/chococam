@@ -184,7 +184,7 @@ public class SocialServerApis {
 		int responseCode = restfulClient.sendHttpRequest(
 				RestfulClient.HttpReqType.HTTP_GET, mServerUrl
 						+ "/logout");
-		if (responseCode == 200) {
+		if (responseCode == 200 || responseCode == 302) {
 			result = true;
 		}else{
 			String strResponse = restfulClient.getResponse();

@@ -156,6 +156,11 @@ public class UserInfoActivity extends Activity implements OnClickListener {
 	}
 	
 	private void LogoutAndStartAgain(){
+		// 2012-11-20 brucewang
+		// Logout API 호출.
+		SocialServerApis social = SocialServerApis.getInstance(UserInfoActivity.this);
+		social.chocoLogout();
+		
 		mChocoFacebook.removeAuthListener(mFacebookSessionListener);
 		UserService.recordMyUserId2(UserInfoActivity.this, "");
 		Intent i = new Intent(UserInfoActivity.this,
