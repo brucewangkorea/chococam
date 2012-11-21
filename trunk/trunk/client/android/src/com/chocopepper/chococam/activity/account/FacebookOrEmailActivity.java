@@ -13,11 +13,13 @@ import android.widget.TextView;
 
 import com.chocopepper.chococam.ProjectG;
 import com.chocopepper.chococam.R;
+import com.chocopepper.chococam.activity.friends.FriendsFeedActivity;
 import com.chocopepper.chococam.dao.UserService;
 import com.chocopepper.chococam.network.SocialServerApis;
 import com.chocopepper.chococam.util.Constants;
 import com.chocopepper.chococam.util.ImageViewRounded;
 import com.chocopepper.chococam.util.Logger;
+import com.chocopepper.chococam.util.MyProgressDialog;
 import com.chocopepper.lib.facebook.BaseRequestListener;
 import com.chocopepper.lib.facebook.ChocoFacebook;
 import com.chocopepper.lib.facebook.FacebookUtility;
@@ -61,6 +63,9 @@ public class FacebookOrEmailActivity extends Activity {
 			mFacebookHandler.post(new Runnable() {
 				@Override
 				public void run() {
+					
+					
+					
 					mImgViewFacebook.setImageBitmap(FacebookUtility
 							.getBitmap(FacebookUtility.profilePhotoUrl));
 					String strMsg = String.format(FacebookOrEmailActivity.this
@@ -78,6 +83,11 @@ public class FacebookOrEmailActivity extends Activity {
 									FacebookUtility.userUID,
 									FacebookUtility.name,
 									FacebookUtility.profilePhotoUrl);
+					
+					// 2012-11-21 brucewang
+					// show progress when registering new user
+					if(mProgress!=null){ mProgress.dismiss(); }
+					
 					if( user!=null ){
 						UserService.recordMyUserId2( FacebookOrEmailActivity.this, user._id  );
 						moveToMainActivity();
@@ -87,6 +97,7 @@ public class FacebookOrEmailActivity extends Activity {
 		}
 	}// end of 'FacebookUserRequestListener'
 
+	MyProgressDialog mProgress=null;
 	/*
 	 * 
 	 * Login/Logout session 관련 이벤트를 종합 관리하는 listener.
@@ -97,6 +108,10 @@ public class FacebookOrEmailActivity extends Activity {
 				LogoutListener {
 		@Override
 		public void onAuthSucceed() {
+			// 2012-11-21 brucewang
+			// show progress when registering new user
+			mProgress = MyProgressDialog.show(FacebookOrEmailActivity.this, "", "");
+			mProgress.setCancelable(true);
 		}
 		@Override
 		public void onAuthFail(String error) {
