@@ -91,7 +91,14 @@ class Api::V1::UsersController  < ApplicationController
   #      auth_token="adadfa"
   #      only_accepted=true/false (optional)
   def following
+  	# 2012-11-21 brucewang
+  	# 파라미터 유효성 체크 (refs #277)
+  	only_accepted = params[:only_accepted]
+  	if( onlyaccepted!="true" && onlyaccepted!="false")
+  		render :status=>500, :json=>{:data=>"Invalid parameter for onlyaccepted."}
+  	end
     only_accepted = params[:only_accepted]=="true" || false
+    
     array = Follow.following(current_user.id, only_accepted) 
     list = []
     array.each{ |a|
@@ -108,7 +115,15 @@ class Api::V1::UsersController  < ApplicationController
   end
 
   def followers
+    # 2012-11-21 brucewang
+  	# 파라미터 유효성 체크 (refs #277)
+  	only_accepted = params[:only_accepted]
+  	if( onlyaccepted!="true" && onlyaccepted!="false")
+  		render :status=>500, :json=>{:data=>"Invalid parameter for onlyaccepted."}
+  	end
     only_accepted = params[:only_accepted]=="true" || false
+    
+    
     array = Follow.followers(current_user.id, only_accepted)
     list = []
     array.each{ |a|
@@ -139,13 +154,29 @@ class Api::V1::UsersController  < ApplicationController
   end
 
   def following_count
+    # 2012-11-21 brucewang
+  	# 파라미터 유효성 체크 (refs #277)
+  	only_accepted = params[:only_accepted]
+  	if( onlyaccepted!="true" && onlyaccepted!="false")
+  		render :status=>500, :json=>{:data=>"Invalid parameter for onlyaccepted."}
+  	end
     only_accepted = params[:only_accepted]=="true" || false
+    
+    
     count = Follow.following_count(current_user.id, only_accepted)
     render :json=>{:data=>count.as_json}
   end
 
   def followers_count
-    only_accepted = params[:only_accepted]=="true"  || false
+    # 2012-11-21 brucewang
+  	# 파라미터 유효성 체크 (refs #277)
+  	only_accepted = params[:only_accepted]
+  	if( onlyaccepted!="true" && onlyaccepted!="false")
+  		render :status=>500, :json=>{:data=>"Invalid parameter for onlyaccepted."}
+  	end
+    only_accepted = params[:only_accepted]=="true" || false
+    
+    
     count = Follow.followers_count(current_user.id, only_accepted)
     render :json=>{:data=>count}
   end
@@ -162,6 +193,10 @@ class Api::V1::UsersController  < ApplicationController
     end
     Follow.follow(current_user.id, to)
     render :json=>{:data=>"ok"}
+  rescue Mongoid::Errors::DocumentNotFound
+    # 2012-11-19 brucewang
+    # 없는 사용자에 대한 예외상황 처리.
+    render :status=>500, :json=>{:data=>"user not found."}
   end
 
   def unfollow
