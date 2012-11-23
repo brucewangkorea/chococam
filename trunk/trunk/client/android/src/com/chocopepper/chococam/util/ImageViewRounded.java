@@ -42,7 +42,13 @@ public class ImageViewRounded extends ImageView {
         	return;
         }
 
-        
+        // limit the image size
+        if( scaledWidth<1 || scaledWidth>128 ){
+        	scaledWidth = 128;
+        }
+        if( scaledHeight<1 || scaledHeight>128 ){
+        	scaledHeight = 128;
+        }
 
         Bitmap mScaledBitmap;
         if (scaledWidth == fullSizeBitmap.getWidth() && scaledHeight == fullSizeBitmap.getHeight()) {
