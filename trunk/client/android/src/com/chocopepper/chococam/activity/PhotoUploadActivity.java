@@ -87,7 +87,15 @@ public class PhotoUploadActivity extends Activity {
 		btnSend.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+
+				if( mEditTitle.getText().toString().length()<1 ){
+					Toast.makeText(PhotoUploadActivity.this, "제목을 입력해 주세요.", Toast.LENGTH_SHORT).show();
+					return;
+				}
+				if( mEditMessage.getText().toString().length()<1 ){
+					Toast.makeText(PhotoUploadActivity.this, "메시지를 입력해 주세", Toast.LENGTH_SHORT).show();
+					return;
+				}
 				
 				new UploadVideoTask().execute(video_path, mEditTitle.getText().toString(), mEditMessage.getText().toString());				
 			}
