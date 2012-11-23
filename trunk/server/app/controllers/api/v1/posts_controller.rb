@@ -255,7 +255,7 @@ class Api::V1::PostsController < ApplicationController
     if @comment.delete
 			unless @post.nil?
 				# 2012-10-11 brucewang
-				@post.comment_count+=1
+				@post.comment_count-=1
 				@post.save
 			end
 			
