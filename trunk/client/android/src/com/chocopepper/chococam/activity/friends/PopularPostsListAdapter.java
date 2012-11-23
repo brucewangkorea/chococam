@@ -130,8 +130,14 @@ public class PopularPostsListAdapter extends BaseAdapter {
 		
 		// 12-10-11 nerine
 		// 동영상의 url을 넣는다.
-		SocialServerApis.ChocoFileUrl mUrl = feed.movie.file_url;		
-		final String movie_url = mUrl.mp4;
+		String movieUrl = "";
+		if(feed.movie!=null){
+			SocialServerApis.ChocoFileUrl mUrl = feed.movie.file_url;		
+			movieUrl = mUrl.mp4;
+		}else{
+			return;
+		}
+		final String movie_url = movieUrl;
 
 //		/**
 //		 * 디바이스마다 다르게 설정 한다. 개선의 여지가 필요한 코드
