@@ -300,7 +300,7 @@ class Api::V1::PostsController < ApplicationController
       return
     end    
     @comment = Comment.find(params[:id])
-    @like = Like.new( :user_id=>current_user.id, :comment=>@comment)
+    @like = Like.new( :user_id=>current_user.id, :comment=>@comment, :post_id=>@comment.post_id)
     if @like.save
       # 이 액션에 해당하는 Feed를 생성.
       @post = @comment.post
