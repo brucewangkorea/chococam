@@ -93,7 +93,7 @@ public class PhotoUploadActivity extends Activity {
 					return;
 				}
 				if( mEditMessage.getText().toString().length()<1 ){
-					Toast.makeText(PhotoUploadActivity.this, "메시지를 입력해 주세", Toast.LENGTH_SHORT).show();
+					Toast.makeText(PhotoUploadActivity.this, "메시지를 입력해 주세요.", Toast.LENGTH_SHORT).show();
 					return;
 				}
 				
@@ -133,7 +133,9 @@ public class PhotoUploadActivity extends Activity {
 
 		@Override
 		protected void onPreExecute() {
-			mProgress = MyProgressDialog.show(PhotoUploadActivity.this, "", "");
+			if( !PhotoUploadActivity.this.isFinishing() ){
+				mProgress = MyProgressDialog.show(PhotoUploadActivity.this, "", "");
+			}
 			super.onPreExecute();
 		}
 
