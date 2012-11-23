@@ -641,10 +641,10 @@ public class RestfulClient {
 					
 					// 2012-11-12 brucewang
 					// bug fix for 'OutOfMemory'
-					if(bytestotal> 4096 ){
-						dos.flush(); // finish upload...
-						System.gc();
-					}
+//					if(bytestotal> 4096 ){
+//						dos.flush(); // finish upload...
+//						//System.gc();
+//					}
 				}
 				
 				mFileInputStream.close();
