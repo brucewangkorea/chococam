@@ -155,6 +155,7 @@
             android:background="@drawable/inputbox"
             android:ems="10"
             android:maxLines="4"
+            android:maxLength="126"
             android:paddingLeft="10dip"
             android:paddingRight="10dip"
             android:text="" />
