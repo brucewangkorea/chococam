@@ -24,19 +24,22 @@
             android:background="@drawable/setting_menu"            
             android:padding="4dp" >
 
+
             <EditText
                 android:id="@+id/etxtTitle"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_below="@+id/TextView01"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginTop="10dp"                
-                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/phone_number_inputbox"
                 android:ems="10"
                 android:inputType="textEmailAddress"
-                android:paddingLeft="10dip">
+                android:maxLength="64"
+                android:paddingLeft="10dip" >
+
                 <requestFocus />
             </EditText>
 
@@ -51,7 +54,8 @@
                 android:text="@string/video_title"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="#ff000000"
-                android:textSize="15dp" />
+                android:textSize="15dp"
+                android:maxLength="1024" />
         </RelativeLayout>
 
         <RelativeLayout
