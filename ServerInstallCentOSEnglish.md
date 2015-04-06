@@ -1,0 +1,283 @@
+# Ruby #
+Ruby version should be 1.9.3 or higher.
+
+```
+# Install libyml
+cd /usr/local/src
+wget http://pyyaml.org/download/libyaml/yaml-0.1.4.tar.gz
+tar xzvf yaml-0.1.4.tar.gz
+cd yaml-0.1.4
+./configure --prefix=/usr/local
+make
+make install
+cd ..
+
+#Install Ruby 1.9.3 
+wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p0.tar.gz
+tar xzvf ruby-1.9.3-p0.tar.gz
+cd ruby-1.9.3-p0
+./configure --prefix=/usr/local --enable-shared --disable-install-doc --with-opt-dir=/usr/local/lib
+make
+make install
+cd ..
+```
+
+# RubyGem #
+
+```
+wget https://rubyforge.org/frs/download.php/74922/rubygems-1.8.4.tgz --no-check-certificate
+tar xzvf rubygems-*.tgz
+cd rubygems-*
+/usr/local/bin/ruby setup.rb
+cd ..
+
+# Update the Gem environment to the latest.
+
+/usr/local/bin/gem update --system
+/usr/local/bin/gem update
+```
+
+
+
+
+
+
+# Rails #
+```
+/usr/local/bin/gem install rails passenger
+```
+# Mysql server and mysql gem #
+```
+rpm -Uvh http://repo.webtatic.com/yum/centos/5/latest.rpm
+yum install mysql mysql-server mysql-devel --enablerepo=webtatic
+chkconfig --levels 235 mysqld on
+cp my.cnf /etc/my.cnf
+mysql_install_db
+
+# install the mysql gem
+/usr/local/bin/gem install mysql -- --with-mysql-config=/usr/bin/mysql_config
+```
+
+# imagemagick, rmagick #
+'imagemagick' is well-known image processing tool, and rmagick is gem for using imagemagick from RoR.
+```
+rpm -Uvh http://rbel.co/rbel5
+yum install ImageMagick-devel ImageMagick-c++-devel
+gem install rmagick
+```
+
+
+
+# mongodb #
+```
+# change the yum repository information so that you can install 
+# mongodb by yum command.
+# First open up the following file with vim,
+> vim /etc/yum.repos.d/10gen.repo
+# add the following lines to that file
+[10gen]
+name=10gen Repository
+baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64
+gpgcheck=0
+enabled=1
+
+# save and exit,
+# now install mongodb 
+yum install mongo-10gen mongo-10gen-server
+
+# Run the mongodb service
+service mongod start
+# if you get Permission denied error
+# change the following file 
+# to the user name and group to 'root'
+> vim /etc/init.d/mongod
+```
+
+# Check out the server code and bundle install #
+Either by check out the server code from svn
+(svn checkout http://chococam.googlecode.com/svn/trunk/ chococam-read-only)
+or upload zip file to the server, and move to the root directory of the
+sever code. And shoot the following command.
+
+```
+sudo yum install libxml libxml-devel libxslt libxslt-devel nodejs
+yum -y install gcc-c++
+bundle install
+```
+
+# delayed\_job for mongoid #
+'delayed\_job' is the gem enabling RoR to do the background job.
+
+First of all, check you can connect to mysql server.
+And check 'config/database.yml' file in the server source code root.
+
+Either you can change 'config/database.yml' file or you can directly change the user
+account settings from the Mysql shell like this.
+
+```
+UPDATE mysql.user SET Password=PASSWORD('password')
+  WHERE User='root' AND Host='localhost';
+FLUSH PRIVILEGES;
+```
+
+Issue the following command to set up the Database structure.
+
+```
+rake db:create
+rake db:create RAILS_ENV=production
+script/rails runner 'Delayed::Backend::Mongoid::Job.create_indexes'
+```
+
+
+# ffmpeg #
+'ffmpeg' is well-known movie transcoding tool. Following process downloads source code and compile so it takes quite of time.
+
+```
+rpm --import http://apt.sw.be/RPM-GPG-KEY.dag.txt
+> vi /etc/yum.repos.d/Centos-DAG.repo
+[dag]
+name=Dag RPM Repository for Red Hat Enterprise Linux
+baseurl=http://apt.sw.be/redhat/el$releasever/en/$basearch/dag
+gpgcheck=1
+enabled=1
+> yum -y install ffmpeg
+
+# set the ffmpeg path
+# by issuing following command
+which ffmpeg
+# and change the following file if the ffmpeg path is different
+vim config/environments/development.rb 
+```
+
+# Set crontab to run your server whenever the server reboots #
+```
+> crontab -e
+@reboot cd {server project root directory}; rm -f log/*; start.sh
+```
+# extra settings #
+Double check your 'config/database.yml' file and other 'config/environments/**.rb' files.
+(Even though this project uses MongoDB, ActiveRecord of RoR checks MySQL anyhow...)
+Check if the following command succeeds.
+```
+rake db:create
+```**
+
+# Run the server #
+Fire the following shell script.
+For more information about the Rails server starting options, please refer to RubyOnRails web site.
+```
+./start.sh
+```
+Basically, the Rails server will use TCP 3000 port.
+
+
+# Automatic server test #
+You can check the automated server test pass by issuing following command from the server source code root directory.
+
+```
+bundle exec rspec spec/requests/*
+```
+
+
+
+# Gem list #
+If you encounter any problems, sometimes it is because of collision of different Gem versions.
+The following list is from our test server.
+
+
+```
+> gem list
+
+*** LOCAL GEMS ***
+
+actionmailer (3.2.8, 3.2.7)
+actionpack (3.2.8, 3.2.7)
+activemodel (3.2.8, 3.2.7)
+activerecord (3.2.8, 3.2.7)
+activeresource (3.2.8, 3.2.7)
+activesupport (3.2.8, 3.2.7)
+addressable (2.3.2)
+arel (3.0.2)
+bcrypt-ruby (3.0.1)
+bigdecimal (1.1.0)
+builder (3.0.4, 3.0.0)
+bundler (1.2.1)
+capybara (1.1.2)
+childprocess (0.3.5)
+cocaine (0.3.0)
+coffee-rails (3.2.2)
+coffee-script (2.2.0)
+coffee-script-source (1.3.3)
+daemon_controller (1.1.0)
+daemons (1.1.9)
+database_cleaner (0.8.0)
+delayed_job (3.0.3)
+delayed_job_mongoid (2.0.0)
+devise (2.1.2)
+diff-lcs (1.1.3)
+erubis (2.7.0)
+execjs (1.4.0)
+faraday (0.8.1)
+fastthread (1.0.7)
+ffi (1.1.5)
+hashie (1.2.0)
+hike (1.2.1)
+httpauth (0.1)
+i18n (0.6.1, 0.6.0)
+io-console (0.3)
+journey (1.0.4)
+jquery-rails (2.1.1)
+json (1.7.5, 1.5.4)
+kaminari (0.13.0)
+libv8 (3.3.10.4 x86_64-linux)
+libwebsocket (0.1.5)
+mail (2.4.4)
+mime-types (1.19)
+minitest (2.5.1)
+mongoid (3.0.5)
+mongoid-paperclip (0.0.8)
+mongoid-rspec (1.5.4)
+moped (1.2.1)
+multi_json (1.3.7, 1.3.6)
+multipart-post (1.1.5)
+mysql (2.8.1)
+mysql2 (0.3.11)
+nokogiri (1.5.5)
+oauth2 (0.6.1)
+omniauth (1.0.3)
+omniauth-facebook (1.3.0)
+omniauth-oauth2 (1.0.2)
+origin (1.0.7)
+orm_adapter (0.4.0)
+paperclip (3.2.0)
+passenger (3.0.18)
+polyglot (0.3.3)
+rack (1.4.1)
+rack-cache (1.2)
+rack-ssl (1.3.2)
+rack-test (0.6.2, 0.6.1)
+rails (3.2.8, 3.2.7)
+railties (3.2.8, 3.2.7)
+rake (0.9.2.2)
+rdoc (3.12, 3.9.4)
+rmagick (2.13.1)
+rspec (2.11.0)
+rspec-core (2.11.1)
+rspec-expectations (2.11.2)
+rspec-mocks (2.11.2)
+rspec-rails (2.11.0)
+rubygems-update (1.8.24)
+rubyzip (0.9.9)
+sass (3.2.1)
+sass-rails (3.2.5)
+selenium-webdriver (2.22.2)
+sprockets (2.1.3)
+therubyracer (0.10.1)
+thor (0.16.0)
+tilt (1.3.3)
+treetop (1.4.12, 1.4.10)
+tzinfo (0.3.35, 0.3.33)
+uglifier (1.2.7)
+warden (1.2.1)
+xpath (0.1.4)
+```

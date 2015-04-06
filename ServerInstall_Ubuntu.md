@@ -1,0 +1,284 @@
+
+```
+cd ~
+mkdir tmp
+cd tmp
+```
+
+# Ruby 설치 #
+Ruby 버전은 1.9.3 이상이어야 한다.
+
+```
+# 필요 라이브러리 및 명령어를 설치
+sudo apt-get -y update
+sudo apt-get -y install build-essential zlib1g-dev libssl-dev libreadline-dev libyaml-dev libcurl4-openssl-dev curl git-core python-software-properties
+sudo apt-get install vim
+
+# Ruby 1.9.3 소스를 다운로드 하여 컴파일/설치.
+wget ftp://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p194.tar.gz
+tar -xvzf ruby-1.9.3-p194.tar.gz
+cd ruby-1.9.3-p194/
+./configure
+make
+sudo make install
+echo "gem: --no-ri --no-rdoc" >> ~/.gemrc
+sudo gem install bundler
+
+# Gem (Ruby에서 사용하는 일종의 라이브러리) 을 관리하는 명령어인 gem의 환경을 최신 상태로 유지
+sudo /usr/local/bin/gem update --system
+sudo /usr/local/bin/gem update
+```
+
+
+
+# Rails 설치 #
+```
+sudo /usr/local/bin/gem install rails passenger
+```
+
+
+# Mysql서버및 mysql gem설치 #
+```
+> MySql 설치시 root 비밀번호를 rails서버 config/database.yml 에서 사용한 비밀번호로 변경.
+> 현재 소스코드에서는  'root' 라고 되어 있음.
+sudo apt-get install mysql-server mysql-client
+sudo /etc/init.d/mysql restart
+sudo apt-get install libmysql-ruby
+sudo apt-get install libmysqlclient-dev
+sudo gem install mysql 
+```
+
+# imagemagick, rmagick 설치 #
+imagemagick은 이미지 파일들을 확대/측소/그리고 다양한 효과를 주어 변환할 수 있도록 하는 외부 프로그램. rmagick은 RoR에서 imagemagick 을 사용할 수 있도록 도와주는 gem 임.
+```
+sudo apt-get install imagemagick --fix-missing
+sudo apt-get install graphicsmagick-libmagick-dev-compat
+sudo apt-get install librmagick-ruby
+sudo apt-get install libmagickwand-dev
+sudo gem install rmagick
+```
+
+# mongodb 인스톨 #
+```
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
+> sudo vim /etc/apt/sources.list
+> 다음 행 추가
+deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen
+> vim 문서 저장후 종료.
+sudo apt-get update
+sudo apt-get install mongodb-10gen
+sudo service mongodb start
+```
+
+# 서버소스 설치 및 bundle 설치 #
+```
+sudo apt-get install subversion
+cd ~
+mkdir svn
+cd svn
+svn checkout http://chococam.googlecode.com/svn/trunk/ chococam-read-only
+sudo apt-get install libxslt-dev libxml2-dev
+sudo gem install nokogiri
+cd ~/svn/chococam-read-only/trunk/server
+bundle install
+```
+
+# delayed\_job for mongoid 설치 #
+delayed\_job은 RoR에서 백그라운드로 작업을 진행할 수 있도록 도와주는 gem.
+
+MySql 접속시 사용하는 socket파일의 경로를 다음 파일에서 확인
+```
+> vim /etc/mysql/my.cnf 
+```
+
+Rails서버 소스코드 디렉토리의 config/database.yml 에서 소켓파일 경로를 수정.
+```
+# 다음과 같이 RoR의 Database 설정파일을 열어서
+> vim config/database.yml
+# 다음과 같이 앞서 my.cnf 파일에서 설정된 소켓 파일의 경로대로
+# /var/lib/mysql/mysql.sock 를 /var/run/mysqld/mysqld.sock 로 변경.
+```
+
+다음의 명령을 수행하여 RoR이 사용하는 Database 구조를 미리 만들어 둠.
+```
+rake db:create
+rake db:create RAILS_ENV=production
+script/rails runner 'Delayed::Backend::Mongoid::Job.create_indexes'
+```
+
+
+# ffmpeg 설치 #
+ffmpeg은 동영상을 변환하는 유명한 외부 프로그램.
+아래의 모든 과정은 소스를 다운로드하여 현재 OS환경에 맞게 컴파일하여 설치하는 과정으로 시간이 상당히 소요됨.
+```
+sudo apt-get remove ffmpeg x264 libav-tools libvpx-dev libx264-dev
+sudo apt-get update
+sudo apt-get -y install autoconf build-essential checkinstall git libfaac-dev libgpac-dev \
+  libjack-jackd2-dev libmp3lame-dev libopencore-amrnb-dev libopencore-amrwb-dev \
+  librtmp-dev libsdl1.2-dev libtheora-dev libtool libva-dev libvdpau-dev libvorbis-dev \
+  libx11-dev libxext-dev libxfixes-dev pkg-config texi2html yasm zlib1g-dev
+```
+## ffmpeg용 x264 코덱 설치 ##
+```
+cd
+git clone --depth 1 git://git.videolan.org/x264
+cd x264
+./configure --enable-static
+make
+sudo checkinstall --pkgname=x264 --pkgversion="3:$(./version.sh | \
+  awk -F'[" ]' '/POINT/{print $4"+git"$5}')" --backup=no --deldoc=yes \
+  --fstrans=no --default
+```
+## fdk-aac 코덱 설치 ##
+```
+cd
+git clone --depth 1 git://github.com/mstorsjo/fdk-aac.git
+cd fdk-aac
+autoreconf -fiv
+./configure --disable-shared
+make
+sudo checkinstall --pkgname=fdk-aac --pkgversion="$(date +%Y%m%d%H%M)-git" --backup=no \
+  --deldoc=yes --fstrans=no --default
+
+```
+## libvpx 코덱 설치 ##
+```
+cd
+git clone --depth 1 http://git.chromium.org/webm/libvpx.git
+cd libvpx
+./configure
+make
+sudo checkinstall --pkgname=libvpx --pkgversion="1:$(date +%Y%m%d%H%M)-git" --backup=no \
+  --deldoc=yes --fstrans=no --default
+```
+
+## FFmpeg 설치 ##
+Ubuntu Server 의 경우는 --enable-x11grab 파라미터를 빼셔야 합니다.
+```
+cd
+git clone --depth 1 git://source.ffmpeg.org/ffmpeg
+cd ffmpeg
+./configure --enable-gpl --enable-libfaac --enable-libfdk-aac --enable-libmp3lame \
+  --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-librtmp --enable-libtheora \
+  --enable-libvorbis --enable-libvpx --enable-x11grab --enable-libx264 --enable-nonfree \
+  --enable-version3
+make
+sudo checkinstall --pkgname=ffmpeg --pkgversion="7:$(date +%Y%m%d%H%M)-git" --backup=no \
+  --deldoc=yes --fstrans=no --default
+hash x264 ffmpeg ffplay ffprobe
+```
+
+## qt-faststart ##
+```
+cd ~/ffmpeg
+make tools/qt-faststart
+sudo checkinstall --pkgname=qt-faststart --pkgversion="$(date +%Y%m%d%H%M)-git" --backup=no \
+  --deldoc=yes --fstrans=no --default install -Dm755 tools/qt-faststart \
+  /usr/local/bin/qt-faststart
+
+```
+이후의 과정은 프로젝트 가이드의 문서 내용과 동일합니다.
+
+
+
+
+# 제대로 설치되었을 때의  gem 목록 #
+
+만일 실행에 이상이 있다면 여기에 언급되지 않은 새로운 버전이나 오래된 버전의 gem이 등록되어 있는것은 아닌지 확인해 보셔야 합니다.
+
+```
+> gem list
+
+*** LOCAL GEMS ***
+
+actionmailer (3.2.8, 3.2.7)
+actionpack (3.2.8, 3.2.7)
+activemodel (3.2.8, 3.2.7)
+activerecord (3.2.8, 3.2.7)
+activeresource (3.2.8, 3.2.7)
+activesupport (3.2.8, 3.2.7)
+addressable (2.3.2)
+arel (3.0.2)
+bcrypt-ruby (3.0.1)
+bigdecimal (1.1.0)
+builder (3.0.4, 3.0.0)
+bundler (1.2.1)
+capybara (1.1.2)
+childprocess (0.3.5)
+cocaine (0.3.0)
+coffee-rails (3.2.2)
+coffee-script (2.2.0)
+coffee-script-source (1.3.3)
+daemon_controller (1.1.0)
+daemons (1.1.9)
+database_cleaner (0.8.0)
+delayed_job (3.0.3)
+delayed_job_mongoid (2.0.0)
+devise (2.1.2)
+diff-lcs (1.1.3)
+erubis (2.7.0)
+execjs (1.4.0)
+faraday (0.8.1)
+fastthread (1.0.7)
+ffi (1.1.5)
+hashie (1.2.0)
+hike (1.2.1)
+httpauth (0.1)
+i18n (0.6.1, 0.6.0)
+io-console (0.3)
+journey (1.0.4)
+jquery-rails (2.1.1)
+json (1.7.5, 1.5.4)
+kaminari (0.13.0)
+libv8 (3.3.10.4 x86_64-linux)
+libwebsocket (0.1.5)
+mail (2.4.4)
+mime-types (1.19)
+minitest (2.5.1)
+mongoid (3.0.5)
+mongoid-paperclip (0.0.8)
+mongoid-rspec (1.5.4)
+moped (1.2.1)
+multi_json (1.3.7, 1.3.6)
+multipart-post (1.1.5)
+mysql (2.8.1)
+mysql2 (0.3.11)
+nokogiri (1.5.5)
+oauth2 (0.6.1)
+omniauth (1.0.3)
+omniauth-facebook (1.3.0)
+omniauth-oauth2 (1.0.2)
+origin (1.0.7)
+orm_adapter (0.4.0)
+paperclip (3.2.0)
+passenger (3.0.18)
+polyglot (0.3.3)
+rack (1.4.1)
+rack-cache (1.2)
+rack-ssl (1.3.2)
+rack-test (0.6.2, 0.6.1)
+rails (3.2.8, 3.2.7)
+railties (3.2.8, 3.2.7)
+rake (0.9.2.2)
+rdoc (3.12, 3.9.4)
+rmagick (2.13.1)
+rspec (2.11.0)
+rspec-core (2.11.1)
+rspec-expectations (2.11.2)
+rspec-mocks (2.11.2)
+rspec-rails (2.11.0)
+rubygems-update (1.8.24)
+rubyzip (0.9.9)
+sass (3.2.1)
+sass-rails (3.2.5)
+selenium-webdriver (2.22.2)
+sprockets (2.1.3)
+therubyracer (0.10.1)
+thor (0.16.0)
+tilt (1.3.3)
+treetop (1.4.12, 1.4.10)
+tzinfo (0.3.35, 0.3.33)
+uglifier (1.2.7)
+warden (1.2.1)
+xpath (0.1.4)
+```

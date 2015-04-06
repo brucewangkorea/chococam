@@ -1,0 +1,251 @@
+# Ruby 설치 #
+Ruby 버전은 1.9.3 이상이어야만 합니다.
+다음과 같이 필수 라이브러리를 사전에 다운 받아 컴파일/설치하고, 마찬가지로 Ruby 1.9.3 버전의 소스를 다운로드하여 컴파일/설치 합니다.
+```
+# Install libyml
+cd /usr/local/src
+wget http://pyyaml.org/download/libyaml/yaml-0.1.4.tar.gz
+tar xzvf yaml-0.1.4.tar.gz
+cd yaml-0.1.4
+./configure --prefix=/usr/local
+make
+make install
+cd ..
+
+#Install Ruby 1.9.3 
+wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p0.tar.gz
+tar xzvf ruby-1.9.3-p0.tar.gz
+cd ruby-1.9.3-p0
+./configure --prefix=/usr/local --enable-shared --disable-install-doc --with-opt-dir=/usr/local/lib
+make
+make install
+cd ..
+```
+
+# RubyGem 설치 #
+Ruby Gem은 Ruby에서 사용하는 일종의 라이브러리인 Gem 들을 설치/관리 할 수 있는 명령어(프로그램)입니다.
+```
+wget https://rubyforge.org/frs/download.php/74922/rubygems-1.8.4.tgz --no-check-certificate
+tar xzvf rubygems-*.tgz
+cd rubygems-*
+/usr/local/bin/ruby setup.rb
+cd ..
+
+#Gem 환경을 최신상태로 업데이트 해 줍니다.
+
+/usr/local/bin/gem update --system
+/usr/local/bin/gem update
+```
+# Rails 설치 #
+```
+/usr/local/bin/gem install rails passenger
+```
+# Mysql서버및 mysql gem설치 #
+```
+rpm -Uvh http://repo.webtatic.com/yum/centos/5/latest.rpm
+yum install mysql mysql-server mysql-devel --enablerepo=webtatic
+chkconfig --levels 235 mysqld on
+cp my.cnf /etc/my.cnf
+mysql_install_db
+
+# mysql gem 설치
+# RoR 서버에서 mysql 접속을 할 수 있도록 도와주는 gem을 설치합니다.
+/usr/local/bin/gem install mysql -- --with-mysql-config=/usr/bin/mysql_config
+```
+
+# imagemagick, rmagick 설치 #
+imagemagick은 이미지 파일을 확대/축소/변환하는 아주 유용한 명령어(프로그램) 입니다. 그리고 rmagick은 RoR서버에서 imagemagick을 사용할 수 있도록 도와주는 gem 입니다.
+```
+rpm -Uvh http://rbel.co/rbel5
+yum install ImageMagick-devel ImageMagick-c++-devel
+gem install rmagick
+```
+# mongodb 인스톨 #
+```
+# mongodb를 yum으로 설치할 수 있도록 repository 정보를 다음과 같이 변경.
+> vim /etc/yum.repos.d/10gen.repo
+[10gen]
+name=10gen Repository
+baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64
+gpgcheck=0
+enabled=1
+
+# mongodb 설치
+yum install mongo-10gen mongo-10gen-server
+
+# mongodb 서비스 실행
+service mongod start
+# Permission denied로 실행이 안되면
+# vim /etc/init.d/mongod 에서 실행 사용자명과 그룹을 root로 변경.
+```
+# 서버소스 설치 및 bundle 설치 #
+서버소스를 SVN 리파지토리에서 checkout (svn checkout http://chococam.googlecode.com/svn/trunk/ chococam-read-only
+)받거나 zip으로 서버에 설치한 다음, 서버소스 디렉토리로 이동하여 다음과같은 명령을 수행한다.
+```
+sudo yum install libxml libxml-devel libxslt libxslt-devel nodejs
+yum -y install gcc-c++
+bundle install
+```
+# delayed\_job for mongoid 설치 #
+delayed\_job 은 RoR에서 백그라운드로 작업을 수행할 수 있도록 도와주는 gem 입니다.
+
+먼저 mysql 접속이 가능한지 mysql 코맨드라인으로 접속 테스트,
+rails 프로젝트 소스의 config/database.yml 파일 설정도 체크한다.
+
+예를들면, rails에서 mysql에 접속할때 사용하는 계정 id와 password를 바꾸기 위해 database.yml을 수정하거나, 직접 mysql 콘솔에서 원하는 유저의 비밀번호 또는 권한을 변경한다.
+```
+UPDATE mysql.user SET Password=PASSWORD('password')
+  WHERE User='root' AND Host='localhost';
+FLUSH PRIVILEGES;
+```
+다음으로, 다음의 명령을 서버소스 프로젝트 디렉토리에서 수행.
+(RoR에서 사용하는 DataBase (MongoDb) 관련 초기화 과정을 하는 과정입니다.)
+```
+rake db:create
+rake db:create RAILS_ENV=production
+script/rails runner 'Delayed::Backend::Mongoid::Job.create_indexes'
+```
+# ffmpeg 설치 #
+ffmpeg은 동영상을 변환하는 아주 유명한 오픈소스 프로그램(명령어) 입니다.
+
+```
+rpm --import http://apt.sw.be/RPM-GPG-KEY.dag.txt
+> vi /etc/yum.repos.d/Centos-DAG.repo
+[dag]
+name=Dag RPM Repository for Red Hat Enterprise Linux
+baseurl=http://apt.sw.be/redhat/el$releasever/en/$basearch/dag
+gpgcheck=1
+enabled=1
+> yum -y install ffmpeg
+
+# ffmpeg 경로 지정
+which ffmpeg
+vim config/environments/development.rb 
+```
+
+# 부팅시 자동 실행을 위해 crontab 설정 #
+```
+> crontab -e
+@reboot cd {서버 프로젝트의 루트디렉토리}; rm -f log/*; start.sh
+```
+# 기타 설정 #
+Rails 서버의 설정은  소스루트디렉토리의 config/database.yml (MySQL 서버 접속 정보), config/environments/**.rb 등에 들어가게 된다. MySql은 실제로는 사용하지 않으나, Rails가 구동될 때 기본 ORM인 MySQL을 확인하게 되어 있어 부득이하게 초기 설정이 필요하다. 따라서 config/database.yml 설정에서 MySQL 접속 정보를 상황에 맞게 변경하고, 소스 루트 디렉토리에서 다음 명령을 수행한다.
+```
+rake db:create
+```**
+
+# 서버 구동 #
+서버는 rails 명령으로 다음과 실행하면 된다. 각종 옵션들은 Rails 관련 다큐먼트를 참고한다.
+```
+./start.sh
+```
+기본적으로 Rails 서버는 TCP 3000 번 포트를 사용하게 된다.
+
+# 서버 자동 테스트 #
+서버 소스디렉토리에서 다음과 같이 미리 만들어 놓은 테스트 시나리오를 수행해 볼 수 있다.
+```
+bundle exec rspec spec/requests/*
+```
+
+
+
+# 제대로 설치되었을 때의  gem 목록 #
+
+만일 실행에 이상이 있다면 여기에 언급되지 않은 새로운 버전이나 오래된 버전의 gem이 등록되어 있는것은 아닌지 확인해 보셔야 합니다.
+
+```
+> gem list
+
+*** LOCAL GEMS ***
+
+actionmailer (3.2.8, 3.2.7)
+actionpack (3.2.8, 3.2.7)
+activemodel (3.2.8, 3.2.7)
+activerecord (3.2.8, 3.2.7)
+activeresource (3.2.8, 3.2.7)
+activesupport (3.2.8, 3.2.7)
+addressable (2.3.2)
+arel (3.0.2)
+bcrypt-ruby (3.0.1)
+bigdecimal (1.1.0)
+builder (3.0.4, 3.0.0)
+bundler (1.2.1)
+capybara (1.1.2)
+childprocess (0.3.5)
+cocaine (0.3.0)
+coffee-rails (3.2.2)
+coffee-script (2.2.0)
+coffee-script-source (1.3.3)
+daemon_controller (1.1.0)
+daemons (1.1.9)
+database_cleaner (0.8.0)
+delayed_job (3.0.3)
+delayed_job_mongoid (2.0.0)
+devise (2.1.2)
+diff-lcs (1.1.3)
+erubis (2.7.0)
+execjs (1.4.0)
+faraday (0.8.1)
+fastthread (1.0.7)
+ffi (1.1.5)
+hashie (1.2.0)
+hike (1.2.1)
+httpauth (0.1)
+i18n (0.6.1, 0.6.0)
+io-console (0.3)
+journey (1.0.4)
+jquery-rails (2.1.1)
+json (1.7.5, 1.5.4)
+kaminari (0.13.0)
+libv8 (3.3.10.4 x86_64-linux)
+libwebsocket (0.1.5)
+mail (2.4.4)
+mime-types (1.19)
+minitest (2.5.1)
+mongoid (3.0.5)
+mongoid-paperclip (0.0.8)
+mongoid-rspec (1.5.4)
+moped (1.2.1)
+multi_json (1.3.7, 1.3.6)
+multipart-post (1.1.5)
+mysql (2.8.1)
+mysql2 (0.3.11)
+nokogiri (1.5.5)
+oauth2 (0.6.1)
+omniauth (1.0.3)
+omniauth-facebook (1.3.0)
+omniauth-oauth2 (1.0.2)
+origin (1.0.7)
+orm_adapter (0.4.0)
+paperclip (3.2.0)
+passenger (3.0.18)
+polyglot (0.3.3)
+rack (1.4.1)
+rack-cache (1.2)
+rack-ssl (1.3.2)
+rack-test (0.6.2, 0.6.1)
+rails (3.2.8, 3.2.7)
+railties (3.2.8, 3.2.7)
+rake (0.9.2.2)
+rdoc (3.12, 3.9.4)
+rmagick (2.13.1)
+rspec (2.11.0)
+rspec-core (2.11.1)
+rspec-expectations (2.11.2)
+rspec-mocks (2.11.2)
+rspec-rails (2.11.0)
+rubygems-update (1.8.24)
+rubyzip (0.9.9)
+sass (3.2.1)
+sass-rails (3.2.5)
+selenium-webdriver (2.22.2)
+sprockets (2.1.3)
+therubyracer (0.10.1)
+thor (0.16.0)
+tilt (1.3.3)
+treetop (1.4.12, 1.4.10)
+tzinfo (0.3.35, 0.3.33)
+uglifier (1.2.7)
+warden (1.2.1)
+xpath (0.1.4)
+```
